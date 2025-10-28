@@ -299,6 +299,14 @@ app.listen(PORT, async () => {
   } catch (error) {
     console.error('⚠️  Failed to start keep-alive service:', error.message);
   }
+
+  // Start registration auto-disable scheduler
+  try {
+    const registrationAutoDisable = (await import('./services/registrationAutoDisable.js')).default;
+    await registrationAutoDisable.start();
+  } catch (error) {
+    console.error('⚠️  Failed to start registration auto-disable scheduler:', error.message);
+  }
 });
 
 export default app;

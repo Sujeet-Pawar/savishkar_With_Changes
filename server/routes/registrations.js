@@ -16,17 +16,6 @@ router.post('/', protect, async (req, res) => {
   try {
     const { eventId, teamName, teamMembers } = req.body;
     
-    // Check if global user registration is disabled (only applies to non-admin users)
-    if (req.user.role !== 'admin') {
-      const userRegistrationDisabled = await Settings.get('user_registration_disabled', 'false');
-      if (userRegistrationDisabled === 'true') {
-        return res.status(403).json({ 
-          success: false, 
-          message: 'User registration is currently disabled by the admin. Please contact the admin for assistance.' 
-        });
-      }
-    }
-    
     // Check if event exists
     const event = await Event.findById(eventId);
     if (!event) {
@@ -66,7 +55,6 @@ router.post('/', protect, async (req, res) => {
     }
     
     // Check for time conflicts with other registered events
-    // Only check registrations with completed or pending/verification_pending payments
     const userRegistrations = await Registration.find({
       user: req.user._id,
       status: { $ne: 'cancelled' },
@@ -85,7 +73,6 @@ router.post('/', protect, async (req, res) => {
         const registeredEventTime = reg.event.time;
         const newEventTime = event.time;
         
-        // Simple time comparison (you can make this more sophisticated)
         return registeredEventTime === newEventTime;
       }
       
@@ -104,30 +91,6 @@ router.post('/', protect, async (req, res) => {
       });
     }
     
-    // Validate team members have Savishkar accounts (for team events)
-    if (teamMembers && teamMembers.length > 0) {
-      const User = (await import('../models/User.js')).default;
-      
-      for (const member of teamMembers) {
-        const memberUser = await User.findOne({ email: member.email.toLowerCase() });
-        
-        if (!memberUser) {
-          return res.status(400).json({ 
-            success: false, 
-            message: `Team member ${member.name} (${member.email}) must have a Savishkar account. Please ask them to register on the website first.` 
-          });
-        }
-        
-        // Verify phone number matches
-        if (memberUser.phone !== member.phone) {
-          return res.status(400).json({ 
-            success: false, 
-            message: `Phone number for ${member.name} doesn't match their registered account.` 
-          });
-        }
-      }
-    }
-    
     // Generate registration number
     const count = await Registration.countDocuments();
     const registrationNumber = `SAV2025-${String(count + 1).padStart(4, '0')}`;
@@ -137,12 +100,7 @@ router.post('/', protect, async (req, res) => {
       user: req.user._id,
       event: eventId,
       teamName,
-      teamMembers: teamMembers || [{
-        name: req.user.name,
-        email: req.user.email,
-        phone: req.user.phone,
-        college: req.user.college
-      }],
+      teamMembers: teamMembers || [],
       amount: event.registrationFee,
       registrationNumber,
       paymentStatus: event.registrationFee === 0 ? 'completed' : 'pending'
@@ -166,7 +124,19 @@ router.post('/', protect, async (req, res) => {
             <p style="color: #2C1810;"><strong>Date:</strong> ${new Date(event.date).toLocaleDateString('en-IN')}</p>
             <p style="color: #2C1810;"><strong>Time:</strong> ${event.time}</p>
             <p style="color: #2C1810;"><strong>Venue:</strong> ${event.venue}</p>
-            ${registration.teamName ? `<p style="color: #2C1810;"><strong>Team Name:</strong> ${registration.teamName}</p>` : ''}
+            ${registration.teamName ? `
+              <p style="color: #2C1810;"><strong>Team Name:</strong> ${registration.teamName}</p>
+              <div style="margin-top: 15px;">
+                <p style="color: #2C1810; font-weight: bold; margin-bottom: 10px;">Team Members:</p>
+                ${registration.teamMembers.map((member, idx) => `
+                  <div style="background: rgba(250, 129, 47, 0.1); padding: 10px; margin-bottom: 8px; border-radius: 5px;">
+                    <p style="color: #2C1810; margin: 2px 0;"><strong>${idx + 1}. ${member.name}</strong> ${idx === 0 ? '(Team Leader - You)' : ''}</p>
+                    <p style="color: #5C4033; margin: 2px 0; font-size: 13px;">📧 ${member.email} | 📱 ${member.phone}</p>
+                    ${member.college ? `<p style="color: #5C4033; margin: 2px 0; font-size: 13px;">🏫 ${member.college}</p>` : ''}
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
             <p style="color: #2C1810;"><strong>Amount:</strong> <span style="color: #8b4513; font-size: 18px;">₹${registration.amount}</span></p>
             <p style="color: #2C1810;"><strong>Payment Status:</strong> <span style="color: ${registration.paymentStatus === 'pending' ? '#8b4513' : '#2d7a3e'};">${registration.paymentStatus.toUpperCase()}</span></p>
           </div>

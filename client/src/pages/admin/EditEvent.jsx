@@ -25,6 +25,7 @@ const EditEvent = () => {
     description: '',
     shortDescription: '',
     category: 'Technical',
+    department: 'CSE',
     date: '',
     time: '',
     venue: '',
@@ -45,6 +46,7 @@ const EditEvent = () => {
   });
 
   const categories = ['Technical', 'Non-Technical', 'Cultural'];
+  const departments = ['CSE', 'AIML', 'ECE', 'Mechanical', 'Civil', 'MBA', 'Applied Science', 'Common'];
 
   useEffect(() => {
     fetchEvent();
@@ -68,6 +70,7 @@ const EditEvent = () => {
         description: event.description || '',
         shortDescription: event.shortDescription || '',
         category: event.category || 'Technical',
+        department: event.department || 'CSE',
         date: formattedDate,
         time: event.time || '',
         venue: event.venue || '',
@@ -427,6 +430,24 @@ const EditEvent = () => {
                   </select>
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-white">Department *</label>
+                  <select
+                    name="department"
+                    value={formData.department}
+                    onChange={handleChange}
+                    className="input-field"
+                    style={{ color: '#ffffff' }}
+                    required
+                  >
+                    {departments.map(dept => (
+                      <option key={dept} value={dept} style={{ backgroundColor: '#1f2937', color: '#ffffff' }}>{dept}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-2 text-white">Event Image</label>
                   <div className="space-y-3">

@@ -36,6 +36,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [registrationDisabled, setRegistrationDisabled] = useState(false);
   const [togglingRegistration, setTogglingRegistration] = useState(false);
+  const [autoDisableInfo, setAutoDisableInfo] = useState(null);
 
   // Determine active tab from URL
   const getActiveTab = () => {
@@ -52,6 +53,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     fetchDashboardData();
     fetchRegistrationControl();
+    fetchAutoDisableInfo();
   }, []);
 
   const fetchDashboardData = async () => {
@@ -111,6 +113,27 @@ const AdminDashboard = () => {
     } finally {
       setTogglingRegistration(false);
     }
+  };
+
+  const fetchAutoDisableInfo = async () => {
+    try {
+      const { data } = await API.get('/admin/registration-auto-disable');
+      setAutoDisableInfo(data);
+    } catch (error) {
+      console.error('Failed to fetch auto-disable info:', error);
+    }
+  };
+
+  const formatTimeRemaining = (milliseconds) => {
+    if (!milliseconds || milliseconds <= 0) return 'Expired';
+    
+    const days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+    
+    if (days > 0) return `${days}d ${hours}h`;
+    if (hours > 0) return `${hours}h ${minutes}m`;
+    return `${minutes}m`;
   };
 
   if (loading) {
@@ -174,6 +197,51 @@ const AdminDashboard = () => {
               </div>
             </button>
           </div>
+
+          {/* Auto-Disable Schedule Info */}
+          {autoDisableInfo && autoDisableInfo.scheduledTime && (
+            <div className="mt-4 p-4 rounded-xl" style={{ 
+              background: 'linear-gradient(to right, #FEF3E2, #FAE8C8)',
+              border: '2px solid #FAB12F'
+            }}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Calendar className="w-5 h-5" style={{ color: '#FA812F' }} />
+                  <div>
+                    <div className="font-semibold" style={{ color: '#5C4033' }}>
+                      Auto-Disable Scheduled
+                    </div>
+                    <div className="text-sm" style={{ color: '#8b4513' }}>
+                      Registration will automatically close on{' '}
+                      <span className="font-bold">
+                        {new Date(autoDisableInfo.scheduledTime).toLocaleString('en-IN', { 
+                          timeZone: 'Asia/Kolkata',
+                          dateStyle: 'medium',
+                          timeStyle: 'short'
+                        })} IST
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                {!autoDisableInfo.hasExecuted && autoDisableInfo.timeRemaining > 0 && (
+                  <div className="px-4 py-2 rounded-lg font-semibold" style={{ 
+                    background: '#FA812F',
+                    color: 'white'
+                  }}>
+                    {formatTimeRemaining(autoDisableInfo.timeRemaining)} remaining
+                  </div>
+                )}
+                {autoDisableInfo.hasExecuted && (
+                  <div className="px-4 py-2 rounded-lg font-semibold" style={{ 
+                    background: '#DC2626',
+                    color: 'white'
+                  }}>
+                    Executed
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </motion.div>
 
         {/* Stats Cards */}
