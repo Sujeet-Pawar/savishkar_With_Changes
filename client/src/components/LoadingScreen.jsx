@@ -9,7 +9,7 @@ const LoadingScreen = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-4 md:mb-6"
+          className="mb-8 md:mb-12 mt-20 md:mt-32"
         >
           <h2 
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-wide"
@@ -28,7 +28,7 @@ const LoadingScreen = () => {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-          className="mb-4 md:mb-6"
+          className="mb-4 md:mb-6 -mt-8 md:-mt-12"
         >
           <img 
             src="/glow.png" 
@@ -45,7 +45,7 @@ const LoadingScreen = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-          className="mb-4 md:mb-6"
+          className="mb-4 md:mb-6 -mt-6 md:-mt-10"
         >
           <h1 
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-wider"
@@ -96,9 +96,9 @@ const LoadingScreen = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 1.2 }}
-            className="mt-4 text-base"
+            className="mt-2 text-lg md:text-xl font-semibold"
             style={{ 
-              color: '#8b6f47',
+              color: '#1a365d',
               fontFamily: 'Georgia, serif'
             }}
           >
