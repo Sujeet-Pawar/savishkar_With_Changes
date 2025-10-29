@@ -2,17 +2,17 @@ import { motion } from 'framer-motion';
 
 const LoadingScreen = () => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: '#FEF3E2' }}>
-      <div className="relative text-center px-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#FEF3E2' }}>
+      <div className="relative text-center px-4 w-full max-w-7xl">
         {/* Welcome Text */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-8"
+          className="mb-4 md:mb-6"
         >
           <h2 
-            className="text-5xl md:text-6xl font-bold tracking-wide"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-wide"
             style={{ 
               color: '#1a365d',
               fontFamily: 'Georgia, serif',
@@ -28,12 +28,15 @@ const LoadingScreen = () => {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-          className="mb-12"
+          className="mb-4 md:mb-6"
         >
           <img 
-            src="/savishkar_logo.png" 
-            alt="Savishkar Logo" 
-            className="w-64 md:w-80 mx-auto"
+            src="/glow.png" 
+            alt="Savishkar 2025" 
+            className="w-full max-w-xs sm:max-w-sm md:max-w-xl lg:max-w-2xl mx-auto px-4"
+            onError={(e) => {
+              e.target.style.display = 'none';
+            }}
           />
         </motion.div>
 
@@ -42,10 +45,10 @@ const LoadingScreen = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-          className="mb-8"
+          className="mb-4 md:mb-6"
         >
           <h1 
-            className="text-6xl md:text-7xl font-bold tracking-wider"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-wider"
             style={{ 
               color: '#1a365d',
               fontFamily: 'Georgia, serif',
@@ -55,7 +58,7 @@ const LoadingScreen = () => {
             SAVISHKAR
           </h1>
           <p 
-            className="text-2xl md:text-3xl font-semibold mt-2"
+            className="text-xl sm:text-2xl md:text-3xl font-semibold mt-2"
             style={{ 
               color: '#8b6f47',
               fontFamily: 'Georgia, serif'
