@@ -111,12 +111,17 @@ const Home = () => {
   // Lock body scroll when modal is open
   useEffect(() => {
     if (showRulebookModal) {
+      // Prevent scrolling on body
       document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = '0px'; // Prevent layout shift from scrollbar
     } else {
-      document.body.style.overflow = 'unset';
+      // Restore scrolling
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
     };
   }, [showRulebookModal]);
 
@@ -129,21 +134,6 @@ const Home = () => {
       {/* Logo Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="relative z-10 flex flex-col items-center justify-center px-4">
-          {/* Welcome Text */}
-          <motion.h1
-            initial={{ opacity: 0, y: -30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center"
-            style={{ 
-              color: '#1e40af',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
-              fontFamily: "'Playfair Display', serif"
-            }}
-          >
-            Welcome to
-          </motion.h1>
-          
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -192,9 +182,6 @@ const Home = () => {
                 className="leading-tight"
                 data-scroll="slide-up"
               >
-                <span className="text-4xl md:text-5xl font-bold block mb-2" style={{ color: '#5C4033', fontFamily: 'Georgia, serif' }}>
-                  Welcome to
-                </span>
                 <span className="text-5xl md:text-7xl font-extrabold block" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
                   Savishkar
                 </span>
