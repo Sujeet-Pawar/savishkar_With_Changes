@@ -108,6 +108,16 @@ const EventDetails = () => {
         eventId: id
       });
 
+      // Show conflict warning if exists
+      if (data.conflictWarning) {
+        showNotification({
+          title: 'Time Conflict Warning',
+          message: data.conflictWarning.message,
+          icon: AlertIcon,
+          type: 'warning'
+        });
+      }
+
       showNotification({
         title: 'Registration Successful!',
         message: `You have successfully registered for ${event.name}! 🎉`,
@@ -174,6 +184,16 @@ const EventDetails = () => {
         teamName,
         teamMembers
       });
+
+      // Show conflict warning if exists
+      if (data.conflictWarning) {
+        showNotification({
+          title: 'Time Conflict Warning',
+          message: data.conflictWarning.message,
+          icon: AlertIcon,
+          type: 'warning'
+        });
+      }
 
       showNotification({
         title: 'Team Registration Successful!',
