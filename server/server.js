@@ -287,30 +287,30 @@ app.use((req, res) => {
   });
 });
 
-// Start server (only if not in Vercel serverless environment)
-if (process.env.VERCEL !== '1') {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, async () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-    console.log(`📡 API URL: http://localhost:${PORT}/api`);
-    console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-    
-    // Start keep-alive service
+// Start server (works for both Render and local development)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, async () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📡 API URL: http://localhost:${PORT}/api`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  
+  // Start keep-alive service (only in development or if explicitly enabled)
+  if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_KEEP_ALIVE === 'true') {
     try {
       const keepAliveService = (await import('./utils/keepAlive.js')).default;
       keepAliveService.start();
     } catch (error) {
       console.error('⚠️  Failed to start keep-alive service:', error.message);
     }
+  }
 
-    // Start registration auto-disable scheduler
-    try {
-      const registrationAutoDisable = (await import('./services/registrationAutoDisable.js')).default;
-      await registrationAutoDisable.start();
-    } catch (error) {
-      console.error('⚠️  Failed to start registration auto-disable scheduler:', error.message);
-    }
-  });
-}
+  // Start registration auto-disable scheduler
+  try {
+    const registrationAutoDisable = (await import('./services/registrationAutoDisable.js')).default;
+    await registrationAutoDisable.start();
+  } catch (error) {
+    console.error('⚠️  Failed to start registration auto-disable scheduler:', error.message);
+  }
+});
 
 export default app;

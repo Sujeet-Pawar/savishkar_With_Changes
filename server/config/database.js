@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const connectDB = async () => {
-  // Skip if already connected (important for serverless)
+  // Skip if already connected
   if (mongoose.connection.readyState === 1) {
     console.log('✅ MongoDB already connected');
     return;
@@ -11,9 +11,7 @@ const connectDB = async () => {
   console.log('─'.repeat(50));
   
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-    });
+    const conn = await mongoose.connect(process.env.MONGODB_URI);
 
     console.log('✅ MongoDB Connected Successfully!');
     console.log(`🌐 Host: ${conn.connection.host}`);
@@ -31,12 +29,8 @@ const connectDB = async () => {
     console.log('   4. Ensure network access is configured');
     console.log('─'.repeat(50));
     
-    // Don't exit in serverless environment
-    if (process.env.VERCEL !== '1') {
-      process.exit(1);
-    } else {
-      throw error; // Let the serverless function handle the error
-    }
+    // Exit with error in all environments
+    process.exit(1);
   }
 };
 
