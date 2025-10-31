@@ -24,7 +24,8 @@
     "clear-notifications": "node scripts/clearNotifications.js",
     "clear-settings": "node scripts/clearSettings.js",
     "migrate-departments": "node scripts/migrateDepartments.js",
-    "import-events": "node scripts/importEventsFromCSV.js"
+    "import-events": "node scripts/importEventsFromCSV.js",
+    "check-cloudinary": "node scripts/checkCloudinaryImages.js"
   },
   "keywords": [
     "techfest",
