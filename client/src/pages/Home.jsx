@@ -53,28 +53,28 @@ const Home = () => {
     }
   ];
 
-  // Sponsors Data - Placeholder images (replace with actual sponsor logos)
+  // Sponsors Data - Cloudinary CDN URLs for fast loading on VPS
+  // Gold Sponsors - Premium tier (larger display)
+  const goldSponsors = [
+    { id: 1, name: 'BGAUSS', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004324/savishkar/sponsors/bgauss.jpg' },
+    { id: 2, name: 'Pizza Hut', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004333/savishkar/sponsors/pizza-hut-page-0002.png' },
+  ];
+
+  // Silver Sponsors - Second tier
+  const silverSponsors = [
+    { id: 1, name: 'Vidyadeep', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004339/savishkar/sponsors/vidyadeep.png' },
+    { id: 2, name: 'Turfka', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004337/savishkar/sponsors/turfka22.png' },
+    { id: 3, name: 'ReStory', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004335/savishkar/sponsors/restory.png' },
+  ];
+
+  // Regular Sponsors - Marquee display
   const sponsors = [
-    { id: 1, name: 'Tech Corp', logo: 'https://placehold.co/200x200/FA812F/FFFFFF?text=Tech+Corp' },
-    { id: 2, name: 'Innovation Labs', logo: 'https://placehold.co/200x200/FAB12F/FFFFFF?text=Innovation' },
-    { id: 3, name: 'Digital Solutions', logo: 'https://placehold.co/200x200/DD0303/FFFFFF?text=Digital' },
-    { id: 4, name: 'Future Tech', logo: 'https://placehold.co/200x200/FA812F/FFFFFF?text=Future+Tech' },
-    { id: 5, name: 'Smart Systems', logo: 'https://placehold.co/200x200/FAB12F/FFFFFF?text=Smart+Sys' },
-    { id: 6, name: 'Cloud Services', logo: 'https://placehold.co/200x200/DD0303/FFFFFF?text=Cloud' },
-    { id: 7, name: 'AI Solutions', logo: 'https://placehold.co/200x200/FA812F/FFFFFF?text=AI+Solutions' },
-    { id: 8, name: 'Data Analytics', logo: 'https://placehold.co/200x200/FAB12F/FFFFFF?text=Analytics' },
-    { id: 9, name: 'Cyber Security', logo: 'https://placehold.co/200x200/DD0303/FFFFFF?text=Cyber+Sec' },
-    { id: 10, name: 'Web Dynamics', logo: 'https://placehold.co/200x200/FA812F/FFFFFF?text=Web+Dyn' },
-    { id: 11, name: 'Mobile First', logo: 'https://placehold.co/200x200/FAB12F/FFFFFF?text=Mobile' },
-    { id: 12, name: 'Code Masters', logo: 'https://placehold.co/200x200/DD0303/FFFFFF?text=Code+Masters' },
-    { id: 13, name: 'Dev Tools', logo: 'https://placehold.co/200x200/FA812F/FFFFFF?text=Dev+Tools' },
-    { id: 14, name: 'Tech Hub', logo: 'https://placehold.co/200x200/FAB12F/FFFFFF?text=Tech+Hub' },
-    { id: 15, name: 'Software Inc', logo: 'https://placehold.co/200x200/DD0303/FFFFFF?text=Software' },
-    { id: 16, name: 'App Builders', logo: 'https://placehold.co/200x200/FA812F/FFFFFF?text=App+Build' },
-    { id: 17, name: 'Network Pro', logo: 'https://placehold.co/200x200/FAB12F/FFFFFF?text=Network' },
-    { id: 18, name: 'System Design', logo: 'https://placehold.co/200x200/DD0303/FFFFFF?text=Sys+Design' },
-    { id: 19, name: 'Tech Innovate', logo: 'https://placehold.co/200x200/FA812F/FFFFFF?text=Innovate' },
-    { id: 20, name: 'Digital Edge', logo: 'https://placehold.co/200x200/FAB12F/FFFFFF?text=Digital+Edge' },
+    { id: 1, name: 'Anjaneya Travels', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004323/savishkar/sponsors/anjaneya-travels.jpg' },
+    { id: 2, name: 'Creative', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004326/savishkar/sponsors/creative.png' },
+    { id: 3, name: 'Delithe', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004327/savishkar/sponsors/delithe.png' },
+    { id: 4, name: 'Jai Bharat', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004330/savishkar/sponsors/jai-bharat.jpg' },
+    { id: 5, name: 'Media Partner', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004332/savishkar/sponsors/media-partner.jpg' },
+    { id: 6, name: "Rajan's", logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004334/savishkar/sponsors/rajan-s.jpg' },
   ];
 
   useEffect(() => {
@@ -341,7 +341,7 @@ const Home = () => {
             >
               <Calendar className="w-12 h-12 mx-auto mb-4" style={{ color: '#1a365d' }} />
               <h3 className="text-4xl font-bold mb-2" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
-                50+
+                35+
               </h3>
               <p className="text-sm" style={{ color: '#5C4033' }}>Events</p>
             </div>
@@ -603,7 +603,88 @@ const Home = () => {
             </p>
           </div>
 
-          {/* Marquee Container */}
+          {/* Gold Sponsors */}
+          {goldSponsors.length > 0 && (
+            <div className="mb-12" data-scroll="fade">
+              <div className="flex items-center justify-center mb-8">
+                <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#FFD700' }}>
+                  <h3 className="text-lg md:text-xl font-bold flex items-center gap-2" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
+                    <span className="text-2xl">🏆</span>
+                    <span>Gold Sponsors</span>
+                  </h3>
+                </div>
+              </div>
+              <div className="flex flex-wrap justify-center items-stretch gap-6 md:gap-8">
+                {goldSponsors.map((sponsor) => (
+                  <motion.div 
+                    key={`gold-${sponsor.id}`} 
+                    className="group"
+                    data-scroll="scale"
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="card p-6 w-48 h-56 md:w-56 md:h-64 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl transition-all duration-300" 
+                         style={{ 
+                           background: 'linear-gradient(135deg, #FEF3E2 0%, #FFF5E6 100%)',
+                           border: '2px solid rgba(255, 215, 0, 0.3)'
+                         }}>
+                      <div className="flex-1 flex items-center justify-center w-full">
+                        <img 
+                          src={sponsor.logo} 
+                          alt={sponsor.name}
+                          className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-110"
+                        />
+                      </div>
+                      <div className="mt-4 pt-4 border-t-2 w-full text-center" style={{ borderColor: 'rgba(255, 215, 0, 0.3)' }}>
+                        <p className="text-sm md:text-base font-bold" style={{ color: '#1a365d' }}>
+                          {sponsor.name}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Silver Sponsors */}
+          {silverSponsors.length > 0 && (
+            <div className="mb-12" data-scroll="fade">
+              <div className="flex items-center justify-center mb-8">
+                <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#C0C0C0' }}>
+                  <h3 className="text-lg md:text-xl font-bold flex items-center gap-2" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
+                    <span className="text-2xl">🥈</span>
+                    <span>Silver Sponsors</span>
+                  </h3>
+                </div>
+              </div>
+              <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10">
+                {silverSponsors.map((sponsor) => (
+                  <div key={`silver-${sponsor.id}`} className="group" data-scroll="scale">
+                    <div className="w-36 h-36 md:w-48 md:h-48 flex items-center justify-center p-4">
+                      <img 
+                        src={sponsor.logo} 
+                        alt={sponsor.name}
+                        className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
+                      />
+                    </div>
+                    <p className="text-center mt-2 text-sm md:text-base font-bold" style={{ color: '#5C4033' }}>
+                      {sponsor.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Regular Sponsors - Marquee Container */}
+          {sponsors.length > 0 && (
+            <div>
+              <div className="flex items-center justify-center mb-6">
+                <h3 className="text-lg md:text-xl font-semibold" style={{ color: '#5C4033', fontFamily: 'Georgia, serif' }}>
+                  Our Partners
+                </h3>
+              </div>
           <div className="relative overflow-hidden py-8">
             {/* Gradient Overlays */}
             <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 z-10 pointer-events-none" 
@@ -616,12 +697,11 @@ const Home = () => {
               {/* First Set of Sponsors */}
               {sponsors.map((sponsor) => (
                 <div key={`sponsor-${sponsor.id}`} className="flex-shrink-0 group">
-                  <div className="w-28 h-28 md:w-40 md:h-40 rounded-lg flex items-center justify-center p-4 md:p-6 transition-transform duration-300 group-hover:scale-110 bg-white" 
-                       style={{ border: '2px solid rgba(250, 129, 47, 0.3)' }}>
+                  <div className="w-28 h-28 md:w-40 md:h-40 flex items-center justify-center p-2 md:p-4">
                     <img 
                       src={sponsor.logo} 
                       alt={sponsor.name}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
                       onError={(e) => {
                         // Fallback to text if image fails to load
                         e.target.style.display = 'none';
@@ -641,12 +721,11 @@ const Home = () => {
               {/* Duplicate Set for Seamless Loop */}
               {sponsors.map((sponsor) => (
                 <div key={`sponsor-dup-${sponsor.id}`} className="flex-shrink-0 group">
-                  <div className="w-28 h-28 md:w-40 md:h-40 rounded-lg flex items-center justify-center p-4 md:p-6 transition-transform duration-300 group-hover:scale-110 bg-white" 
-                       style={{ border: '2px solid rgba(250, 129, 47, 0.3)' }}>
+                  <div className="w-28 h-28 md:w-40 md:h-40 flex items-center justify-center p-2 md:p-4">
                     <img 
                       src={sponsor.logo} 
                       alt={sponsor.name}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
                       onError={(e) => {
                         // Fallback to text if image fails to load
                         e.target.style.display = 'none';
@@ -664,6 +743,8 @@ const Home = () => {
               ))}
             </div>
           </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -698,57 +779,29 @@ const Home = () => {
       <footer className="py-6" style={{ borderTop: '2px solid rgba(250, 129, 47, 0.3)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Coordinators Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="text-center" data-scroll="fade" data-scroll-delay="100">
               <h4 className="text-lg font-bold mb-2" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>
                 Student Co-ordinators
               </h4>
-              <p style={{ color: '#2C1810' }}>Contact: +91 XXXXXXXXXX</p>
+                <p style={{ color: '#2C1810' }}>MR. Sambhav: +91 XXXXXXXXXX</p>
+                <p style={{ color: '#2C1810' }}>MS. Sakshi: +91 XXXXXXXXXX</p>
             </div>
             <div className="text-center" data-scroll="fade" data-scroll-delay="200">
               <h4 className="text-lg font-bold mb-2" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>
                 Faculty Co-ordinator
               </h4>
-              <p className="mb-6" style={{ color: '#2C1810' }}>Prof. [Name]</p>
-              
-              {/* Navigation Links - Below Faculty Coordinator */}
-              <div className="flex items-center justify-center flex-wrap gap-4 mt-2">
-              <Link to="/" className="text-sm transition-all duration-300 relative group font-bold" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>
-                Home
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 rounded-full" style={{ backgroundColor: '#8b4513' }} />
-              </Link>
-              <Link to="/events" className="text-sm transition-all duration-300 relative group font-bold" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>
-                Events
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 rounded-full" style={{ backgroundColor: '#8b4513' }} />
-              </Link>
-              {isAuthenticated ? (
-                <>
-                  <Link to="/dashboard" className="text-sm transition-all duration-300 relative group font-bold" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>
-                    Dashboard
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 rounded-full" style={{ backgroundColor: '#8b4513' }} />
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" className="text-sm transition-all duration-300 relative group font-bold" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>
-                    Login
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 rounded-full" style={{ backgroundColor: '#8b4513' }} />
-                  </Link>
-                  <Link to="/signup" className="text-sm transition-all duration-300 relative group font-bold" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>
-                    Register
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 rounded-full" style={{ backgroundColor: '#8b4513' }} />
-                  </Link>
-                </>
-              )}
-              </div>
+              <p style={{ color: '#2C1810' }}>Prof.Rahul Bannur</p>
+              <p style={{ color: '#2C1810' }}>Prof.Karthik Ramdurg</p>
             </div>
             <div className="text-center" data-scroll="fade" data-scroll-delay="300">
               <h4 className="text-lg font-bold mb-2" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>
-                Principal
+                Principal & Director
               </h4>
-              <p style={{ color: '#2C1810' }}>Dr. [Name]</p>
+              <p style={{ color: '#2C1810' }}>Dr. S.V.Gorabal</p>
             </div>
           </div>
+           
           
           <div className="text-center" data-scroll="slide-up">
             <div className="flex items-center justify-center space-x-3 mb-3">
@@ -764,7 +817,7 @@ const Home = () => {
             {/* Social Media Links */}
             <div className="flex items-center justify-center space-x-6 mb-3">
               <motion.a
-                href="https://instagram.com/savishkar2025"
+                href="https://www.instagram.com/savishkar.jcer_?igsh=bXNlaTY2Ym1hMDl0"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition-colors"
@@ -776,7 +829,7 @@ const Home = () => {
                 <Instagram className="w-6 h-6" />
               </motion.a>
               <motion.a
-                href="mailto:contact@savishkar.com"
+                href="mailto:contact@savishkarjcer.com"
                 className="transition-colors"
                 style={{ color: '#FA812F' }}
                 aria-label="Email"

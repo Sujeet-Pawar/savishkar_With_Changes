@@ -86,22 +86,22 @@ const MobileNavbar = () => {
           {/* User Info & Menu Button */}
           <div className="flex items-center space-x-2">
             {user && (
-              <div className="flex items-center space-x-2 glass-effect px-2 py-1 rounded-lg" style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
+              <div className="glass-effect p-1.5 rounded-lg" style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
                 {user.avatar ? (
                   <img 
                     src={getImageUrl(user.avatar)} 
                     alt={user.name}
-                    className="w-6 h-6 rounded-full object-cover border border-gray-600"
+                    className="w-8 h-8 rounded-full object-cover border-2"
+                    style={{ borderColor: '#FA812F' }}
                     onError={(e) => {
                       e.target.style.display = 'none';
                     }}
                   />
                 ) : (
-                  <User className="w-4 h-4" style={{ color: '#FA812F' }} />
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center border-2" style={{ backgroundColor: 'rgba(250, 129, 47, 0.1)', borderColor: '#FA812F' }}>
+                    <User className="w-4 h-4" style={{ color: '#FA812F' }} />
+                  </div>
                 )}
-                <div className="flex flex-col max-w-[100px]">
-                  <span className="text-xs font-semibold truncate" style={{ color: '#2C1810' }}>{user.name}</span>
-                </div>
               </div>
             )}
             

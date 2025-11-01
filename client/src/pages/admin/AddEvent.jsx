@@ -35,7 +35,8 @@ const AddEvent = () => {
     paymentQRCode: '',
     paymentUPI: '',
     paymentAccountName: '',
-    paymentInstructions: ''
+    paymentInstructions: '',
+    whatsappLink: ''
   });
 
   const categories = ['Technical', 'Non-Technical', 'Cultural'];
@@ -717,6 +718,22 @@ const AddEvent = () => {
                     />
                   </div>
                 </div>
+              </div>
+              
+              {/* WhatsApp Link */}
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#5C4033' }}>WhatsApp Community Link</label>
+                <input
+                  type="url"
+                  name="whatsappLink"
+                  value={formData.whatsappLink}
+                  onChange={handleChange}
+                  className="input-field"
+                  placeholder="https://chat.whatsapp.com/..."
+                />
+                <p className="text-xs mt-1" style={{ color: 'rgba(92, 64, 51, 0.7)' }}>
+                  Add a WhatsApp community link to be included in registration confirmation emails
+                </p>
               </div>
             </div>
 

@@ -42,7 +42,8 @@ const EditEvent = () => {
     paymentAccountName: '',
     paymentInstructions: '',
     qrCodes: [],
-    currentQRIndex: 0
+    currentQRIndex: 0,
+    whatsappLink: ''
   });
 
   const categories = ['Technical', 'Non-Technical', 'Cultural'];
@@ -87,7 +88,8 @@ const EditEvent = () => {
         paymentAccountName: event.paymentAccountName || '',
         paymentInstructions: event.paymentInstructions || '',
         qrCodes: event.qrCodes || [],
-        currentQRIndex: event.currentQRIndex || 0
+        currentQRIndex: event.currentQRIndex || 0,
+        whatsappLink: event.whatsappLink || ''
       });
       
       if (event.image) {
@@ -851,6 +853,22 @@ const EditEvent = () => {
                     />
                   </div>
                 </div>
+              </div>
+              
+              {/* WhatsApp Link */}
+              <div>
+                <label className="block text-sm font-medium mb-2 text-white">WhatsApp Community Link</label>
+                <input
+                  type="url"
+                  name="whatsappLink"
+                  value={formData.whatsappLink}
+                  onChange={handleChange}
+                  className="input-field"
+                  placeholder="https://chat.whatsapp.com/..."
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Add a WhatsApp community link to be included in registration confirmation emails
+                </p>
               </div>
             </div>
 

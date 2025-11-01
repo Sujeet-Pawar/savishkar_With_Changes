@@ -103,28 +103,25 @@ const DesktopNavbar = () => {
                   <div className="relative">
                     <button
                       onClick={() => setShowProfileMenu(!showProfileMenu)}
-                      className="flex items-center space-x-2 glass-effect px-4 py-2 rounded-lg transition-colors hover:bg-opacity-80"
+                      className="flex items-center space-x-2 glass-effect px-3 py-2 rounded-lg transition-colors hover:bg-opacity-80"
                       style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}
                     >
                       {user.avatar ? (
                         <img 
                           src={getImageUrl(user.avatar)} 
                           alt={user.name}
-                          className="w-8 h-8 rounded-full object-cover border-2 border-gray-600"
+                          className="w-9 h-9 rounded-full object-cover border-2"
+                          style={{ borderColor: '#FA812F' }}
                           onError={(e) => {
                             console.error('Navbar image failed to load:', user.avatar);
                             e.target.style.display = 'none';
                           }}
                         />
                       ) : (
-                        <User className="w-5 h-5" style={{ color: '#FA812F' }} />
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center border-2" style={{ backgroundColor: 'rgba(250, 129, 47, 0.1)', borderColor: '#FA812F' }}>
+                          <User className="w-5 h-5" style={{ color: '#FA812F' }} />
+                        </div>
                       )}
-                      <div className="flex flex-col items-start">
-                        <span className="text-sm font-semibold" style={{ color: '#2C1810' }}>{user.name}</span>
-                        {user.college && (
-                          <span className="text-xs truncate max-w-[200px]" style={{ color: '#8b4513' }}>{user.college}</span>
-                        )}
-                      </div>
                       <ChevronDown className="w-4 h-4" style={{ color: '#FA812F' }} />
                     </button>
                     

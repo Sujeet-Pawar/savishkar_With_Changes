@@ -23,6 +23,8 @@ const EventDetails = () => {
   const [collegeSuggestions, setCollegeSuggestions] = useState({});
   const [isRegistered, setIsRegistered] = useState(false);
   const [userRegistration, setUserRegistration] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
 
   // Initialize team members with logged-in user as first member when modal opens
   useEffect(() => {
@@ -81,33 +83,21 @@ const EventDetails = () => {
   };
 
 
-  const handleRegister = async () => {
-    if (!isAuthenticated) {
-      showNotification({
-        title: 'Login Required',
-        message: 'Please login to register',
-        icon: AlertIcon,
-        type: 'error'
-      });
-      navigate('/login');
-      return;
-    }
-
-    const isTeamEvent = event.teamSize.max > 1;
-    
-    // For team events, show the team modal
-    if (isTeamEvent) {
-      setShowTeamModal(true);
-      return;
-    }
-
-    // For individual events, register directly
+  // Function to perform the actual registration API call
+  const performRegistration = async (category = null) => {
     setRegistering(true);
 
     try {
-      const { data } = await API.post('/registrations', {
+      const registrationData = {
         eventId: id
-      });
+      };
+      
+      // Add selected category if exists
+      if (category) {
+        registrationData.registrationCategory = category;
+      }
+      
+      const { data } = await API.post('/registrations', registrationData);
 
       // Show conflict warning if exists
       if (data.conflictWarning) {
@@ -126,7 +116,8 @@ const EventDetails = () => {
       });
       
       setTimeout(() => {
-        if (event.registrationFee > 0) {
+        // Use the amount from registration data to determine if payment is needed
+        if (data.registration.amount > 0) {
           navigate(`/payment/${data.registration._id}`);
         } else {
           navigate('/dashboard');
@@ -144,6 +135,36 @@ const EventDetails = () => {
     } finally {
       setRegistering(false);
     }
+  };
+
+  const handleRegister = async () => {
+    if (!isAuthenticated) {
+      showNotification({
+        title: 'Login Required',
+        message: 'Please login to register',
+        icon: AlertIcon,
+        type: 'error'
+      });
+      navigate('/login');
+      return;
+    }
+
+    // Check if event has multiple registration categories
+    if (event.registrationCategories && event.registrationCategories.length > 0) {
+      setShowCategoryModal(true);
+      return;
+    }
+
+    const isTeamEvent = event.teamSize.max > 1;
+    
+    // For team events, show the team modal
+    if (isTeamEvent) {
+      setShowTeamModal(true);
+      return;
+    }
+
+    // For individual events, register directly
+    await performRegistration();
   };
 
   const handleTeamSubmit = async () => {
@@ -180,11 +201,18 @@ const EventDetails = () => {
     setRegistering(true);
 
     try {
-      const { data } = await API.post('/registrations', {
+      const registrationData = {
         eventId: id,
         teamName,
         teamMembers
-      });
+      };
+      
+      // Add selected category if exists
+      if (selectedCategory) {
+        registrationData.registrationCategory = selectedCategory;
+      }
+      
+      const { data } = await API.post('/registrations', registrationData);
 
       // Show conflict warning if exists
       if (data.conflictWarning) {
@@ -389,10 +417,27 @@ const EventDetails = () => {
                 <Users className="w-5 h-5 mr-3 text-primary-400" />
                 {event.currentParticipants}/{event.maxParticipants} Participants
               </div>
-              <div className="flex items-center text-2xl font-bold text-primary-400">
-                <IndianRupee className="w-6 h-6 mr-2" />
-                {event.registrationFee === 0 ? 'Free' : event.registrationFee}
-              </div>
+              {event.registrationCategories && event.registrationCategories.length > 0 ? (
+                <div className="text-gray-300">
+                  <div className="flex items-center text-lg font-semibold mb-2" style={{ color: '#FA812F' }}>
+                    <IndianRupee className="w-5 h-5 mr-2" />
+                    Multiple Categories Available
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    {event.registrationCategories.map((cat, idx) => (
+                      <div key={idx} className="flex items-center justify-between" style={{ color: '#8b4513' }}>
+                        <span>{cat.categoryName}:</span>
+                        <span className="font-bold" style={{ color: '#FA812F' }}>₹{cat.fee}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center text-2xl font-bold text-primary-400">
+                  <IndianRupee className="w-6 h-6 mr-2" />
+                  {event.registrationFee === 0 ? 'Free' : event.registrationFee}
+                </div>
+              )}
             </div>
 
             <button
@@ -530,6 +575,95 @@ const EventDetails = () => {
           </div>
         </div>
       </section>
+
+      {/* Category Selection Modal */}
+      {showCategoryModal && event.registrationCategories && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="rounded-2xl max-w-md w-full"
+            style={{ backgroundColor: '#FEF3E2', border: '2px solid rgba(92, 64, 51, 0.3)' }}
+          >
+            <div className="p-6 flex justify-between items-center border-b-2" style={{ borderColor: 'rgba(92, 64, 51, 0.3)' }}>
+              <div>
+                <h2 className="text-2xl font-bold" style={{ color: '#FA812F' }}>Select Category</h2>
+                <p className="text-sm mt-1" style={{ color: '#8b4513' }}>
+                  Choose your registration category
+                </p>
+              </div>
+              <button
+                onClick={() => setShowCategoryModal(false)}
+                className="p-2 rounded-lg transition-colors"
+                style={{ color: '#FA812F' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(250, 129, 47, 0.2)'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              {event.registrationCategories.map((category, index) => (
+                <motion.button
+                  key={index}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    const categoryName = category.categoryName;
+                    setSelectedCategory(categoryName);
+                    setShowCategoryModal(false);
+                    
+                    // Check if it's a team event
+                    const isTeamEvent = event.teamSize.max > 1;
+                    if (isTeamEvent) {
+                      setShowTeamModal(true);
+                    } else {
+                      // Register directly for individual events
+                      performRegistration(categoryName);
+                    }
+                  }}
+                  className="w-full p-4 rounded-xl transition-all duration-300 text-left"
+                  style={{
+                    backgroundColor: '#FFF8DC',
+                    border: '2px solid rgba(250, 129, 47, 0.3)',
+                    boxShadow: '0 2px 8px rgba(250, 129, 47, 0.1)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(250, 129, 47, 0.1)';
+                    e.currentTarget.style.borderColor = '#FA812F';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#FFF8DC';
+                    e.currentTarget.style.borderColor = 'rgba(250, 129, 47, 0.3)';
+                  }}
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-bold" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
+                      {category.categoryName}
+                    </h3>
+                    <div className="flex items-center text-xl font-bold" style={{ color: '#FA812F' }}>
+                      <IndianRupee className="w-5 h-5" />
+                      {category.fee}
+                    </div>
+                  </div>
+                  {category.description && (
+                    <p className="text-sm mb-2" style={{ color: '#8b4513' }}>
+                      {category.description}
+                    </p>
+                  )}
+                  {category.prize && (
+                    <div className="flex items-center text-sm font-semibold" style={{ color: '#2d7a3e' }}>
+                      <Trophy className="w-4 h-4 mr-1" style={{ color: '#FAB12F' }} />
+                      Prize: {category.prize}
+                    </div>
+                  )}
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       {/* Team Registration Modal */}
       {showTeamModal && (
