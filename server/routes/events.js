@@ -2,6 +2,7 @@ import express from 'express';
 import Event from '../models/Event.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { uploadEventImage } from '../middleware/upload.js';
+import { getOptimizedUrl } from '../utils/cloudinaryUrl.js';
 
 const router = express.Router();
 
@@ -33,10 +34,19 @@ router.get('/', async (req, res) => {
       .sort({ date: 1 })
       .populate('createdBy', 'name email');
     
+    // Optimize image URLs for WebP
+    const optimizedEvents = events.map(event => {
+      const eventObj = event.toObject();
+      if (eventObj.image) {
+        eventObj.image = getOptimizedUrl(eventObj.image);
+      }
+      return eventObj;
+    });
+    
     res.json({
       success: true,
-      count: events.length,
-      events
+      count: optimizedEvents.length,
+      events: optimizedEvents
     });
   } catch (error) {
     res.status(500).json({ 
@@ -61,9 +71,15 @@ router.get('/:id', async (req, res) => {
       });
     }
     
+    // Optimize image URL for WebP
+    const eventObj = event.toObject();
+    if (eventObj.image) {
+      eventObj.image = getOptimizedUrl(eventObj.image);
+    }
+    
     res.json({
       success: true,
-      event
+      event: eventObj
     });
   } catch (error) {
     res.status(500).json({ 

@@ -14,42 +14,51 @@ cloudinary.config({
 // Storage for payment screenshots
 export const paymentStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: 'savishkar/payments',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-    transformation: [{ width: 1000, height: 1000, crop: 'limit' }],
-    public_id: (req, file) => {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      return `payment-${uniqueSuffix}`;
-    }
+  params: async (req, file) => {
+    return {
+      folder: 'savishkar/payments',
+      allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+      // Don't force format conversion - let Cloudinary serve optimal format via f_auto
+      transformation: [
+        { width: 1000, height: 1000, crop: 'limit' },
+        { quality: 'auto:good' }
+      ],
+      public_id: `payment-${Date.now()}-${Math.round(Math.random() * 1E9)}`
+    };
   }
 });
 
 // Storage for event images
 export const eventStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: 'savishkar/events',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
-    transformation: [{ width: 1200, height: 800, crop: 'limit' }],
-    public_id: (req, file) => {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      return `event-${uniqueSuffix}`;
-    }
+  params: async (req, file) => {
+    return {
+      folder: 'savishkar/events',
+      allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
+      // Don't force format conversion - let Cloudinary serve optimal format via f_auto
+      transformation: [
+        { width: 1200, height: 800, crop: 'limit' },
+        { quality: 'auto:best' }
+      ],
+      public_id: `event-${Date.now()}-${Math.round(Math.random() * 1E9)}`
+    };
   }
 });
 
 // Storage for user avatars
 export const avatarStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: 'savishkar/avatars',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-    transformation: [{ width: 500, height: 500, crop: 'fill', gravity: 'face' }],
-    public_id: (req, file) => {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      return `avatar-${uniqueSuffix}`;
-    }
+  params: async (req, file) => {
+    return {
+      folder: 'savishkar/avatars',
+      allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+      // Don't force format conversion - let Cloudinary serve optimal format via f_auto
+      transformation: [
+        { width: 500, height: 500, crop: 'fill', gravity: 'face' },
+        { quality: 'auto:good' }
+      ],
+      public_id: `avatar-${Date.now()}-${Math.round(Math.random() * 1E9)}`
+    };
   }
 });
 

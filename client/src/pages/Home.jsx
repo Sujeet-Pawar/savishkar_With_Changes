@@ -780,30 +780,29 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Coordinators Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="text-center" data-scroll="fade" data-scroll-delay="100">
+            <div className="text-center">
               <h4 className="text-lg font-bold mb-2" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>
                 Student Co-ordinators
               </h4>
-                <p style={{ color: '#2C1810' }}>MR. Sambhav: +91 XXXXXXXXXX</p>
-                <p style={{ color: '#2C1810' }}>MS. Sakshi: +91 XXXXXXXXXX</p>
+              <p style={{ color: '#2C1810' }}>MR. Sambhav: +91 XXXXXXXXXX</p>
+              <p style={{ color: '#2C1810' }}>MS. Sakshi: +91 XXXXXXXXXX</p>
             </div>
-            <div className="text-center" data-scroll="fade" data-scroll-delay="200">
+            <div className="text-center">
               <h4 className="text-lg font-bold mb-2" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>
                 Faculty Co-ordinator
               </h4>
-              <p style={{ color: '#2C1810' }}>Prof.Rahul Bannur</p>
-              <p style={{ color: '#2C1810' }}>Prof.Karthik Ramdurg</p>
+              <p style={{ color: '#2C1810' }}>Prof. Rahul Bannur</p>
+              <p style={{ color: '#2C1810' }}>Prof. Karthik Ramdurg</p>
             </div>
-            <div className="text-center" data-scroll="fade" data-scroll-delay="300">
+            <div className="text-center">
               <h4 className="text-lg font-bold mb-2" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>
                 Principal & Director
               </h4>
-              <p style={{ color: '#2C1810' }}>Dr. S.V.Gorabal</p>
+              <p style={{ color: '#2C1810' }}>Dr. S.V. Gorabal</p>
             </div>
           </div>
-           
           
-          <div className="text-center" data-scroll="slide-up">
+          <div className="text-center">
             <div className="flex items-center justify-center space-x-3 mb-3">
               <img 
                 src="/glow.png" 

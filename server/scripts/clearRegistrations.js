@@ -45,6 +45,14 @@ const clearRegistrations = async () => {
     const result = await Registration.deleteMany({});
     console.log(`\n✅ Deleted ${result.deletedCount} registrations`);
 
+    // Reset currentParticipants count for all events
+    console.log('\n🔄 Resetting event participant counts...');
+    const eventUpdateResult = await Event.updateMany(
+      {},
+      { $set: { currentParticipants: 0 } }
+    );
+    console.log(`✅ Reset participant counts for ${eventUpdateResult.modifiedCount} events`);
+
     console.log('\n✅ Registrations collection cleared successfully!');
     
     console.log('\n📊 Final Summary:');
@@ -53,6 +61,7 @@ const clearRegistrations = async () => {
     console.log(`   - Pending Payment Registrations: ${pendingRegistrations}`);
     console.log(`   - Verification Pending Registrations: ${verificationPendingRegistrations}`);
     console.log(`   - Team Registrations: ${teamRegistrations}`);
+    console.log(`   - Events Participant Count Reset: ${eventUpdateResult.modifiedCount}`);
     console.log(`   - Registrations Remaining: 0`);
 
     process.exit(0);

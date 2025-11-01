@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Calendar, MapPin, Users, IndianRupee, Clock, Trophy, ArrowLeft, UserPlus, X, AlertTriangle, CheckCircle, AlertCircle as AlertIcon } from 'lucide-react';
+import { Calendar, MapPin, Users, IndianRupee, Clock, Trophy, ArrowLeft, UserPlus, X, AlertTriangle, CheckCircle, AlertCircle as AlertIcon, Download, ZoomIn } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import API from '../services/api';
@@ -25,6 +25,7 @@ const EventDetails = () => {
   const [userRegistration, setUserRegistration] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
 
   // Initialize team members with logged-in user as first member when modal opens
   useEffect(() => {
@@ -358,19 +359,28 @@ const EventDetails = () => {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="relative h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-primary-500 to-secondary-500"
+            className="relative h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-primary-500 to-secondary-500 group cursor-pointer"
+            onClick={() => event.image && setShowImageModal(true)}
           >
             {event.image ? (
-              <img 
-                src={getImageUrl(event.image)} 
-                alt={event.name} 
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  console.error('Event detail image failed to load:', event.image);
-                  e.target.style.display = 'none';
-                }}
-                onLoad={() => console.log('Event detail image loaded:', getImageUrl(event.image))}
-              />
+              <>
+                <img 
+                  src={getImageUrl(event.image)} 
+                  alt={event.name} 
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  onError={(e) => {
+                    console.error('Event detail image failed to load:', event.image);
+                    e.target.style.display = 'none';
+                  }}
+                  onLoad={() => console.log('Event detail image loaded:', getImageUrl(event.image))}
+                />
+                {/* Zoom overlay on hover */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-3">
+                    <ZoomIn className="w-8 h-8" style={{ color: '#FA812F' }} />
+                  </div>
+                </div>
+              </>
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <div className="text-center text-white">
@@ -379,8 +389,8 @@ const EventDetails = () => {
                 </div>
               </div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-            <div className="absolute bottom-6 left-6">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent pointer-events-none"></div>
+            <div className="absolute bottom-6 left-6 pointer-events-none">
               <span className="px-4 py-2 bg-primary-500 text-white font-semibold rounded-full">
                 {event.category}
               </span>
@@ -660,6 +670,62 @@ const EventDetails = () => {
                   )}
                 </motion.button>
               ))}
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Image Modal */}
+      {showImageModal && event.image && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm"
+          onClick={() => setShowImageModal(false)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative max-w-7xl max-h-[90vh] w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setShowImageModal(false)}
+              className="absolute -top-12 right-0 p-2 rounded-lg transition-colors bg-white/10 hover:bg-white/20"
+              style={{ color: '#FEF3E2' }}
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            {/* Download button */}
+            <a
+              href={getImageUrl(event.image)}
+              download={`${event.name}-poster.jpg`}
+              className="absolute -top-12 right-14 p-2 rounded-lg transition-colors bg-white/10 hover:bg-white/20 flex items-center gap-2"
+              style={{ color: '#FEF3E2' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Download className="w-6 h-6" />
+              <span className="text-sm font-semibold">Download</span>
+            </a>
+
+            {/* Full-size image */}
+            <div className="relative w-full h-full flex items-center justify-center">
+              <img 
+                src={getImageUrl(event.image)} 
+                alt={event.name} 
+                className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+                onError={(e) => {
+                  console.error('Full-size image failed to load:', event.image);
+                }}
+              />
+            </div>
+
+            {/* Event name overlay */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+              <h3 className="text-2xl font-bold text-white" style={{ fontFamily: 'Georgia, serif' }}>
+                {event.name}
+              </h3>
+              <p className="text-white/80 mt-1">{event.category}</p>
             </div>
           </motion.div>
         </div>

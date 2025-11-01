@@ -593,13 +593,17 @@ router.put('/:id/reject', protect, authorize('admin'), async (req, res) => {
 
     // Delete the registration to free up the slot
     await Registration.findByIdAndDelete(payment.registration);
+    console.log(`🗑️ Deleted registration ${payment.registration} for rejected payment`);
 
     // Decrease event participant count AFTER deleting registration
     const event = await Event.findById(eventId);
-    if (event && event.currentParticipants > 0) {
-      event.currentParticipants -= 1;
+    if (event) {
+      const previousCount = event.currentParticipants;
+      event.currentParticipants = Math.max(0, event.currentParticipants - 1);
       await event.save();
-      console.log(`✅ Decreased participant count for event ${event.name}: ${event.currentParticipants}`);
+      console.log(`✅ Decreased participant count for event "${event.name}": ${previousCount} → ${event.currentParticipants}`);
+    } else {
+      console.error(`❌ Event not found with ID: ${eventId}`);
     }
 
     // Send rejection email to user
