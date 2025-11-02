@@ -1,6 +1,6 @@
 import express from 'express';
 import Sponsor from '../models/Sponsor.js';
-import { authenticateToken, isAdmin } from '../middleware/auth.js';
+import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -72,7 +72,7 @@ router.get('/:id', async (req, res) => {
  * @desc    Create a new sponsor
  * @access  Admin only
  */
-router.post('/', authenticateToken, isAdmin, async (req, res) => {
+router.post('/', protect, authorize('admin'), async (req, res) => {
   try {
     const { name, tier, logo, cloudinaryPublicId, website, description, displayOrder } = req.body;
 
@@ -116,7 +116,7 @@ router.post('/', authenticateToken, isAdmin, async (req, res) => {
  * @desc    Update a sponsor
  * @access  Admin only
  */
-router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
+router.put('/:id', protect, authorize('admin'), async (req, res) => {
   try {
     const { name, tier, logo, cloudinaryPublicId, website, description, displayOrder, isActive } = req.body;
 
@@ -161,7 +161,7 @@ router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
  * @desc    Delete a sponsor (soft delete by setting isActive to false)
  * @access  Admin only
  */
-router.delete('/:id', authenticateToken, isAdmin, async (req, res) => {
+router.delete('/:id', protect, authorize('admin'), async (req, res) => {
   try {
     const sponsor = await Sponsor.findById(req.params.id);
     
@@ -195,7 +195,7 @@ router.delete('/:id', authenticateToken, isAdmin, async (req, res) => {
  * @desc    Bulk create sponsors
  * @access  Admin only
  */
-router.post('/bulk', authenticateToken, isAdmin, async (req, res) => {
+router.post('/bulk', protect, authorize('admin'), async (req, res) => {
   try {
     const { sponsors } = req.body;
 

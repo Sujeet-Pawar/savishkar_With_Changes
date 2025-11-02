@@ -54,35 +54,16 @@ const Home = () => {
     }
   ];
 
-  // Sponsors Data - Fetched from database
-  const [goldSponsors, setGoldSponsors] = useState([]);
-  const [silverSponsors, setSilverSponsors] = useState([]);
-  const [sponsors, setSponsors] = useState([]);
-  const [sponsorsLoading, setSponsorsLoading] = useState(true);
+  // Sponsors Data - Using local files
+  const goldSponsors = [
+    { name: 'Skyworld', logo: '/sponsors/skyworld.jpg' },
+    { name: 'Jaybharat', logo: '/sponsors/jaybharat.jpg' }
+  ];
 
-  // Fetch sponsors from API
-  useEffect(() => {
-    const fetchSponsors = async () => {
-      try {
-        setSponsorsLoading(true);
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-        const response = await axios.get(`${API_URL}/sponsors`);
-        
-        if (response.data.success) {
-          setGoldSponsors(response.data.data.gold || []);
-          setSilverSponsors(response.data.data.silver || []);
-          setSponsors(response.data.data.partner || []);
-        }
-      } catch (error) {
-        console.error('Error fetching sponsors:', error);
-        // Keep empty arrays on error
-      } finally {
-        setSponsorsLoading(false);
-      }
-    };
-
-    fetchSponsors();
-  }, []);
+  const silverSponsors = [
+    { name: 'Baguss', logo: '/sponsors/baguss.jpg' },
+    { name: 'Aquavales', logo: '/sponsors/aquavales.png' }
+  ];
 
   useEffect(() => {
     // Set event date - November 12-13, 2025 (2 Days)
@@ -605,159 +586,133 @@ const Home = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
               Our Sponsors
             </h2>
-            <p className="text-base md:text-lg" style={{ color: '#5C4033' }}>
+            <p className="text-base" style={{ color: '#5C4033' }}>
               Powered by industry leaders and innovators
             </p>
           </div>
 
           {/* Gold Sponsors */}
-          {goldSponsors.length > 0 && (
-            <div className="mb-12" data-scroll="fade">
-              <div className="flex items-center justify-center mb-8">
-                <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#FFD700' }}>
-                  <h3 className="text-lg md:text-xl font-bold flex items-center gap-2" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
-                    <span className="text-2xl">🏆</span>
-                    <span>Gold Sponsors</span>
-                  </h3>
-                </div>
-              </div>
-              <div className="flex flex-wrap justify-center items-stretch gap-6 md:gap-8">
-                {goldSponsors.map((sponsor) => (
-                  <motion.div 
-                    key={`gold-${sponsor._id}`} 
-                    className="group"
-                    data-scroll="scale"
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="card p-6 w-48 h-56 md:w-56 md:h-64 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl transition-all duration-300" 
-                         style={{ 
-                           background: 'linear-gradient(135deg, #FEF3E2 0%, #FFF5E6 100%)',
-                           border: '2px solid rgba(255, 215, 0, 0.3)'
-                         }}>
-                      <div className="flex-1 flex items-center justify-center w-full">
-                        <img 
-                          src={sponsor.logo} 
-                          alt={sponsor.name}
-                          className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-110"
-                        />
-                      </div>
-                      <div className="mt-4 pt-4 border-t-2 w-full text-center" style={{ borderColor: 'rgba(255, 215, 0, 0.3)' }}>
-                        <p className="text-sm md:text-base font-bold" style={{ color: '#1a365d' }}>
-                          {sponsor.name}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Silver Sponsors */}
-          {silverSponsors.length > 0 && (
-            <div className="mb-12" data-scroll="fade">
-              <div className="flex items-center justify-center mb-8">
-                <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#C0C0C0' }}>
-                  <h3 className="text-lg md:text-xl font-bold flex items-center gap-2" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
-                    <span className="text-2xl">🥈</span>
-                    <span>Silver Sponsors</span>
-                  </h3>
-                </div>
-              </div>
-              <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10">
-                {silverSponsors.map((sponsor) => (
-                  <div key={`silver-${sponsor._id}`} className="group" data-scroll="scale">
-                    <div className="w-36 h-36 md:w-48 md:h-48 flex items-center justify-center p-4">
-                      <img 
-                        src={sponsor.logo} 
-                        alt={sponsor.name}
-                        className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
-                      />
-                    </div>
-                    <p className="text-center mt-2 text-sm md:text-base font-bold" style={{ color: '#5C4033' }}>
-                      {sponsor.name}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Regular Sponsors - Marquee Container */}
-          {sponsors.length > 0 && (
-            <div>
-              <div className="flex items-center justify-center mb-6">
-                <h3 className="text-lg md:text-xl font-semibold" style={{ color: '#5C4033', fontFamily: 'Georgia, serif' }}>
-                  Our Partners
+          <div className="mb-16" data-scroll="fade">
+            <div className="flex items-center justify-center mb-10">
+              <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#FFD700' }}>
+                <h3 className="text-lg md:text-xl font-bold flex items-center gap-2" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
+                  <span className="text-2xl">🏆</span>
+                  <span>Gold Sponsors</span>
                 </h3>
               </div>
-          <div className="relative overflow-hidden py-8">
-            {/* Gradient Overlays */}
-            <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 z-10 pointer-events-none" 
-                 style={{ background: 'linear-gradient(to right, #FFF5E6 0%, transparent 100%)' }} />
-            <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 z-10 pointer-events-none" 
-                 style={{ background: 'linear-gradient(to left, #FFF5E6 0%, transparent 100%)' }} />
-
-            {/* Marquee Animation */}
-            <div className="flex animate-marquee gap-6 md:gap-12">
-              {/* First Set of Sponsors */}
-              {sponsors.map((sponsor) => (
-                <div key={`sponsor-${sponsor._id}`} className="flex-shrink-0 group">
-                  <div className="w-28 h-28 md:w-40 md:h-40 flex items-center justify-center p-2 md:p-4">
+            </div>
+            <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20">
+              {[
+                { logo: '/sponsors/skyworld.jpg', name: 'Skyworld' },
+                { logo: '/sponsors/jaybharat.jpg', name: 'Jaybharat' },
+              ].map((sponsor, index) => (
+                <motion.div 
+                  key={`gold-${index}`} 
+                  className="group"
+                  data-scroll="scale"
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
                     <img 
                       src={sponsor.logo} 
                       alt={sponsor.name}
-                      className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
-                      onError={(e) => {
-                        // Fallback to text if image fails to load
-                        e.target.style.display = 'none';
-                        e.target.parentElement.innerHTML = `<span class="text-xl md:text-3xl font-bold text-center" style="color: #FA812F">${sponsor.name}</span>`;
-                      }}
+                      className="max-w-full max-h-full object-contain transition-all duration-300 filter drop-shadow-lg"
                     />
                   </div>
-                  {/* Sponsor Name on Hover */}
-                  <div className="mt-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="text-xs md:text-sm font-bold whitespace-nowrap" style={{ color: '#5C4033' }}>
-                      {sponsor.name}
-                    </p>
-                  </div>
-                </div>
-              ))}
-
-              {/* Duplicate Set for Seamless Loop */}
-              {sponsors.map((sponsor) => (
-                <div key={`sponsor-dup-${sponsor._id}`} className="flex-shrink-0 group">
-                  <div className="w-28 h-28 md:w-40 md:h-40 flex items-center justify-center p-2 md:p-4">
-                    <img 
-                      src={sponsor.logo} 
-                      alt={sponsor.name}
-                      className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
-                      onError={(e) => {
-                        // Fallback to text if image fails to load
-                        e.target.style.display = 'none';
-                        e.target.parentElement.innerHTML = `<span class="text-xl md:text-3xl font-bold text-center" style="color: #FA812F">${sponsor.name}</span>`;
-                      }}
-                    />
-                  </div>
-                  {/* Sponsor Name on Hover */}
-                  <div className="mt-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="text-xs md:text-sm font-bold whitespace-nowrap" style={{ color: '#5C4033' }}>
-                      {sponsor.name}
-                    </p>
-                  </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
+
+          {/* Silver Sponsors */}
+          <div className="mb-16" data-scroll="fade">
+            <div className="flex items-center justify-center mb-10">
+              <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#C0C0C0' }}>
+                <h3 className="text-lg md:text-xl font-bold flex items-center gap-2" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
+                  <span className="text-2xl">🥈</span>
+                  <span>Silver Sponsors</span>
+                </h3>
+              </div>
             </div>
-          )}
+            <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16">
+              {[
+                { logo: '/sponsors/BGAUSS.jpg', name: 'Baguss' },
+                { logo: '/sponsors/aquavales.png', name: 'Aquavales' },
+              ].map((sponsor, index) => (
+                <motion.div 
+                  key={`silver-${index}`} 
+                  className="group" 
+                  data-scroll="scale"
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="w-32 h-32 md:w-48 md:h-48 flex items-center justify-center">
+                    <img 
+                      src={sponsor.logo} 
+                      alt={sponsor.name}
+                      className="w-full h-full object-contain transition-all duration-300 filter drop-shadow-md"
+                    />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Our Partners - Marquee */}
+          <div className="mb-12" data-scroll="fade">
+            <div className="flex items-center justify-center mb-10">
+              <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+                <h3 className="text-lg md:text-xl font-bold flex items-center gap-2 text-white" style={{ fontFamily: 'Georgia, serif' }}>
+                  <span className="text-2xl">🤝</span>
+                  <span>Our Partners</span>
+                </h3>
+              </div>
+            </div>
+            <div className="relative overflow-hidden py-8">
+              <div className="flex animate-marquee whitespace-nowrap">
+                {[
+                  { logo: '/sponsors/Anjaneya Travels.jpg', name: 'Anjaneya Travels' },
+                  { logo: '/sponsors/CREATIVE.png', name: 'Creative' },
+                  { logo: '/sponsors/ReStory.png', name: 'ReStory' },
+                  { logo: '/sponsors/Turfka22.jpg', name: 'Turfka' },
+                  { logo: '/sponsors/Vidyadeep .png', name: 'Vidyadeep' },
+                  { logo: '/sponsors/delithe.png', name: 'Delithe' },
+                  { logo: '/sponsors/rajan\'s.jpg', name: 'Rajan\'s' },
+                  { logo: '/sponsors/media partner.jpg', name: 'Media Partner' },
+                ].concat([
+                  { logo: '/sponsors/Anjaneya Travels.jpg', name: 'Anjaneya Travels' },
+                  { logo: '/sponsors/CREATIVE.png', name: 'Creative' },
+                  { logo: '/sponsors/ReStory.png', name: 'ReStory' },
+                  { logo: '/sponsors/Turfka22.jpg', name: 'Turfka' },
+                  { logo: '/sponsors/Vidyadeep .png', name: 'Vidyadeep' },
+                  { logo: '/sponsors/delithe.png', name: 'Delithe' },
+                  { logo: '/sponsors/rajan\'s.jpg', name: 'Rajan\'s' },
+                  { logo: '/sponsors/media partner.jpg', name: 'Media Partner' },
+                ]).map((partner, index) => (
+                  <div 
+                    key={`partner-${index}`} 
+                    className="inline-flex items-center justify-center mx-8"
+                  >
+                    <div className="w-24 h-24 md:w-32 md:h-32 flex items-center justify-center">
+                      <img 
+                        src={partner.logo} 
+                        alt={partner.name}
+                        className="max-w-full max-h-full object-contain filter drop-shadow-md"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
       {/* CTA Section */}
       {!isAuthenticated && (
-        <section className="py-16 relative overflow-hidden">
+        <section>
           <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div
               className="card text-center p-12 relative overflow-hidden"

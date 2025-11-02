@@ -641,3 +641,7 @@ a {
   will-change: transform;
 }
 
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+

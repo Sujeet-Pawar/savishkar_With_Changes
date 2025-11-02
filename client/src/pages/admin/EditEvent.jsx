@@ -1062,9 +1062,15 @@ const EditEvent = () => {
                     <input
                       type="tel"
                       value={coord.phone}
-                      onChange={(e) => handleCoordinatorChange(index, 'phone', e.target.value)}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        handleCoordinatorChange(index, 'phone', value);
+                      }}
                       className="input-field"
-                      placeholder="Phone"
+                      placeholder="10-digit phone number"
+                      maxLength="10"
+                      pattern="[0-9]{10}"
+                      title="Enter a valid 10-digit phone number"
                     />
                     <input
                       type="email"

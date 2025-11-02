@@ -846,9 +846,15 @@ const EventDetails = () => {
                           <input
                             type="tel"
                             value={member.phone}
-                            onChange={(e) => updateTeamMember(index, 'phone', e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                              updateTeamMember(index, 'phone', value);
+                            }}
                             className="input-field"
                             placeholder="10-digit phone number"
+                            maxLength="10"
+                            pattern="[0-9]{10}"
+                            title="Enter a valid 10-digit phone number"
                             required
                             readOnly={index === 0}
                             style={index === 0 ? { backgroundColor: 'rgba(45, 122, 62, 0.05)', cursor: 'not-allowed' } : {}}
@@ -860,12 +866,79 @@ const EventDetails = () => {
                           <input
                             type="text"
                             value={member.college}
-                            onChange={(e) => updateTeamMember(index, 'college', e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              updateTeamMember(index, 'college', value);
+                              
+                              if (value.length > 0 && index !== 0) {
+                                const filtered = colleges.filter(college =>
+                                  college.toLowerCase().includes(value.toLowerCase())
+                                ).slice(0, 10);
+                                setCollegeSuggestions({ ...collegeSuggestions, [index]: filtered });
+                              } else {
+                                const updated = { ...collegeSuggestions };
+                                delete updated[index];
+                                setCollegeSuggestions(updated);
+                              }
+                            }}
+                            onFocus={() => {
+                              if (member.college.length > 0 && index !== 0) {
+                                const filtered = colleges.filter(college =>
+                                  college.toLowerCase().includes(member.college.toLowerCase())
+                                ).slice(0, 10);
+                                setCollegeSuggestions({ ...collegeSuggestions, [index]: filtered });
+                              }
+                            }}
+                            onBlur={() => {
+                              setTimeout(() => {
+                                const updated = { ...collegeSuggestions };
+                                delete updated[index];
+                                setCollegeSuggestions(updated);
+                              }, 200);
+                            }}
                             className="input-field"
-                            placeholder="College name (optional)"
+                            placeholder="Start typing college name..."
                             readOnly={index === 0}
+                            autoComplete="off"
                             style={index === 0 ? { backgroundColor: 'rgba(45, 122, 62, 0.05)', cursor: 'not-allowed' } : {}}
                           />
+                          
+                          {/* College Suggestions Dropdown */}
+                          {collegeSuggestions[index] && collegeSuggestions[index].length > 0 && index !== 0 && (
+                            <div 
+                              className="absolute z-50 w-full mt-1 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                              style={{ 
+                                backgroundColor: '#FFF8DC', 
+                                border: '2px solid rgba(250, 129, 47, 0.3)',
+                              }}
+                            >
+                              {collegeSuggestions[index].map((college, suggestionIndex) => (
+                                <div
+                                  key={suggestionIndex}
+                                  onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    updateTeamMember(index, 'college', college);
+                                    const updated = { ...collegeSuggestions };
+                                    delete updated[index];
+                                    setCollegeSuggestions(updated);
+                                  }}
+                                  className="px-4 py-2 cursor-pointer transition-colors text-sm"
+                                  style={{ 
+                                    color: '#5C4033',
+                                    borderBottom: suggestionIndex < collegeSuggestions[index].length - 1 ? '1px solid rgba(92, 64, 51, 0.1)' : 'none'
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.backgroundColor = 'rgba(250, 129, 47, 0.1)';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.backgroundColor = 'transparent';
+                                  }}
+                                >
+                                  {college}
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
