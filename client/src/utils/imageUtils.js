@@ -28,18 +28,21 @@ export const getImageUrl = (imageUrl, options = {}) => {
       
       // Add transformations for better performance if optimize is true
       if (optimize && url.includes('/upload/')) {
-        // Build transformation string
-        const transformations = [];
-        transformations.push('f_auto'); // Auto format (WebP for supported browsers)
-        transformations.push(`q_${quality}`); // Quality
-        if (width) transformations.push(`w_${width}`);
-        if (height) transformations.push(`h_${height}`);
-        transformations.push('c_limit'); // Don't upscale
+        // Check if transformations are already present (backend might have added them)
+        const hasTransformations = url.match(/\/upload\/[^\/]+\//);
         
-        const transformStr = transformations.join(',');
-        
-        // Insert transformations before /upload/ if not already present
-        if (!url.includes(transformStr)) {
+        if (!hasTransformations || !url.includes('f_auto')) {
+          // Build transformation string
+          const transformations = [];
+          transformations.push('f_auto'); // Auto format (WebP for supported browsers)
+          transformations.push(`q_${quality}`); // Quality
+          if (width) transformations.push(`w_${width}`);
+          if (height) transformations.push(`h_${height}`);
+          transformations.push('c_limit'); // Don't upscale
+          
+          const transformStr = transformations.join(',');
+          
+          // Insert transformations before /upload/
           url = url.replace('/upload/', `/upload/${transformStr}/`);
         }
       }

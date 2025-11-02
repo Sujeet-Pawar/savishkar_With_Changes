@@ -1,7 +1,7 @@
 import express from 'express';
 import Event from '../models/Event.js';
 import { protect, authorize } from '../middleware/auth.js';
-import { uploadEventImage } from '../middleware/upload.js';
+import { uploadEventImage, uploadQRCode } from '../middleware/upload.js';
 import { getOptimizedUrl } from '../utils/cloudinaryUrl.js';
 
 const router = express.Router();
@@ -175,6 +175,45 @@ router.post('/upload-image', protect, authorize('admin'), uploadEventImage.singl
     });
   } catch (error) {
     console.error('❌ Image upload error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+// @route   POST /api/events/upload-qrcode
+// @desc    Upload QR code for event payment
+// @access  Private/Admin
+router.post('/upload-qrcode', protect, authorize('admin'), uploadQRCode.single('qrcode'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please upload a QR code image'
+      });
+    }
+
+    // Cloudinary returns full URL in req.file.path, local storage uses filename
+    const qrCodeUrl = req.file.path || `${process.env.SERVER_URL || 'http://localhost:5000'}/uploads/qrcodes/${req.file.filename}`;
+
+    // Log upload details for debugging
+    console.log('📤 QR Code uploaded:', {
+      storage: req.file.path ? 'Cloudinary' : 'Local',
+      url: qrCodeUrl,
+      filename: req.file.filename || 'N/A',
+      originalName: req.file.originalname,
+      size: `${(req.file.size / 1024).toFixed(2)} KB`
+    });
+
+    res.json({
+      success: true,
+      message: 'QR code uploaded successfully',
+      qrCodeUrl,
+      storage: req.file.path ? 'cloudinary' : 'local' // Help frontend identify storage type
+    });
+  } catch (error) {
+    console.error('❌ QR code upload error:', error);
     res.status(500).json({
       success: false,
       message: error.message

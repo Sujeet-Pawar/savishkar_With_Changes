@@ -297,11 +297,31 @@ const EventCard = ({ event, index, isRegistered }) => (
           <Users className="w-4 h-4 mr-2" style={{ color: '#FA812F' }} />
           {event.currentParticipants}/{event.maxParticipants}
         </div>
-        <div className="flex items-center font-semibold" style={{ color: '#1a365d' }}>
-          <IndianRupee className="w-4 h-4" />
-          {event.registrationFee === 0 ? 'Free' : event.registrationFee}
-        </div>
+        {event.registrationCategories && event.registrationCategories.length > 0 ? (
+          <div className="flex items-center font-semibold text-xs" style={{ color: '#FA812F' }}>
+            <IndianRupee className="w-4 h-4" />
+            Multiple Categories Available
+          </div>
+        ) : (
+          <div className="flex items-center font-semibold" style={{ color: '#1a365d' }}>
+            <IndianRupee className="w-4 h-4" />
+            {event.registrationFee === 0 ? 'Free' : event.registrationFee}
+          </div>
+        )}
       </div>
+      {event.registrationCategories && event.registrationCategories.length > 0 && (
+        <div className="mt-3 pt-3 border-t space-y-1" style={{ borderColor: 'rgba(92, 64, 51, 0.2)' }}>
+          {event.registrationCategories.map((cat, idx) => (
+            <div key={idx} className="flex justify-between text-sm" style={{ color: '#5C4033' }}>
+              <span>{cat.categoryName}:</span>
+              <span className="font-semibold flex items-center" style={{ color: '#FA812F' }}>
+                <IndianRupee className="w-3 h-3" />
+                {cat.fee}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
 
     {/* View Details Button */}

@@ -15,6 +15,11 @@ cloudinary.config({
 export const paymentStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
+    // Extract filename without extension
+    const originalName = file.originalname.replace(/\.[^/.]+$/, '');
+    // Sanitize filename: remove special chars, replace spaces with hyphens
+    const sanitizedName = originalName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+    
     return {
       folder: 'savishkar/payments',
       allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
@@ -23,7 +28,8 @@ export const paymentStorage = new CloudinaryStorage({
         { width: 1000, height: 1000, crop: 'limit' },
         { quality: 'auto:good' }
       ],
-      public_id: `payment-${Date.now()}-${Math.round(Math.random() * 1E9)}`
+      // Use original filename with timestamp to avoid conflicts
+      public_id: `${sanitizedName}-${Date.now()}`
     };
   }
 });
@@ -32,6 +38,11 @@ export const paymentStorage = new CloudinaryStorage({
 export const eventStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
+    // Extract filename without extension
+    const originalName = file.originalname.replace(/\.[^/.]+$/, '');
+    // Sanitize filename: remove special chars, replace spaces with hyphens
+    const sanitizedName = originalName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+    
     return {
       folder: 'savishkar/events',
       allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
@@ -40,7 +51,8 @@ export const eventStorage = new CloudinaryStorage({
         { width: 1200, height: 800, crop: 'limit' },
         { quality: 'auto:best' }
       ],
-      public_id: `event-${Date.now()}-${Math.round(Math.random() * 1E9)}`
+      // Use original filename with timestamp to avoid conflicts
+      public_id: `${sanitizedName}-${Date.now()}`
     };
   }
 });
@@ -49,6 +61,11 @@ export const eventStorage = new CloudinaryStorage({
 export const avatarStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
+    // Extract filename without extension
+    const originalName = file.originalname.replace(/\.[^/.]+$/, '');
+    // Sanitize filename: remove special chars, replace spaces with hyphens
+    const sanitizedName = originalName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+    
     return {
       folder: 'savishkar/avatars',
       allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
@@ -57,7 +74,31 @@ export const avatarStorage = new CloudinaryStorage({
         { width: 500, height: 500, crop: 'fill', gravity: 'face' },
         { quality: 'auto:good' }
       ],
-      public_id: `avatar-${Date.now()}-${Math.round(Math.random() * 1E9)}`
+      // Use original filename with timestamp to avoid conflicts
+      public_id: `${sanitizedName}-${Date.now()}`
+    };
+  }
+});
+
+// Storage for QR codes (separate folder for event QR codes)
+export const qrCodeStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    // Extract filename without extension
+    const originalName = file.originalname.replace(/\.[^/.]+$/, '');
+    // Sanitize filename: remove special chars, replace spaces with hyphens
+    const sanitizedName = originalName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+    
+    return {
+      folder: 'savishkar/qrcodes',
+      allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+      // Don't force format conversion - let Cloudinary serve optimal format via f_auto
+      transformation: [
+        { width: 800, height: 800, crop: 'limit' },
+        { quality: 'auto:best' }
+      ],
+      // Use original filename with timestamp to avoid conflicts
+      public_id: `${sanitizedName}-${Date.now()}`
     };
   }
 });

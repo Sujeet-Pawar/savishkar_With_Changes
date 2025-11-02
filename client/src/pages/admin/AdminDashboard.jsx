@@ -1323,6 +1323,7 @@ const RegisterUserManagement = ({ events, onUpdate }) => {
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedEvent, setSelectedEvent] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [teamName, setTeamName] = useState('');
   const [teamMembers, setTeamMembers] = useState([]);
   const [submitting, setSubmitting] = useState(false);
@@ -1414,6 +1415,7 @@ const RegisterUserManagement = ({ events, onUpdate }) => {
       // The backend will handle the main user separately
       const payload = {
         eventId: selectedEvent,
+        registrationCategory: selectedCategory || undefined,
         teamName: teamName || undefined,
         teamMembers: teamMembers.length > 0 ? teamMembers : undefined,
         newUser: newUserData
@@ -1423,6 +1425,7 @@ const RegisterUserManagement = ({ events, onUpdate }) => {
       
       toast.success('User created and registered successfully!');
       setSelectedEvent('');
+      setSelectedCategory('');
       setTeamName('');
       setTeamMembers([]);
       setNewUserData({ name: '', email: '', phone: '', college: '' });
@@ -1697,13 +1700,57 @@ const RegisterUserManagement = ({ events, onUpdate }) => {
                     <strong>Date:</strong> {new Date(selectedEventData.date).toLocaleDateString('en-IN')}<br />
                     <strong>Time:</strong> {selectedEventData.time}<br />
                     <strong>Venue:</strong> {selectedEventData.venue}<br />
-                    <strong>Fee:</strong> ₹{selectedEventData.registrationFee}<br />
+                    {selectedEventData.registrationCategories && selectedEventData.registrationCategories.length > 0 ? (
+                      <>
+                        <strong>Fee:</strong> Multiple Categories Available<br />
+                        {selectedEventData.registrationCategories.map((cat, idx) => (
+                          <span key={idx} style={{ marginLeft: '20px', display: 'block' }}>
+                            • {cat.categoryName}: ₹{cat.fee}
+                          </span>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        <strong>Fee:</strong> ₹{selectedEventData.registrationFee}<br />
+                      </>
+                    )}
                     <strong>Available Slots:</strong> {selectedEventData.maxParticipants - selectedEventData.currentParticipants}
                   </p>
                 </div>
               )}
-            </div>
-
+            </div>`n`n            {/* Registration Category Selection (for events with multiple categories) */}
+            {selectedEventData && selectedEventData.registrationCategories && selectedEventData.registrationCategories.length > 0 && (
+              <div>
+                <label className="block text-sm font-semibold mb-2" style={{ color: '#5C4033' }}>
+                  Select Registration Category *
+                </label>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 rounded-lg"
+                  style={{ 
+                    backgroundColor: '#FFF8DC', 
+                    border: '2px solid rgba(92, 64, 51, 0.2)',
+                    color: '#5C4033'
+                  }}
+                >
+                  <option value="">-- Select a category --</option>
+                  {selectedEventData.registrationCategories.map((cat, idx) => (
+                    <option key={idx} value={cat.categoryName}>
+                      {cat.categoryName} - ₹{cat.fee}
+                    </option>
+                  ))}
+                </select>
+                {selectedCategory && (
+                  <div className="mt-2 p-3 rounded-lg" style={{ backgroundColor: 'rgba(250, 177, 47, 0.1)', border: '1px solid rgba(250, 177, 47, 0.3)' }}>
+                    <p className="text-sm" style={{ color: '#5C4033' }}>
+                      <strong>Selected:</strong> {selectedCategory} - ₹{selectedEventData.registrationCategories.find(c => c.categoryName === selectedCategory)?.fee}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
             {/* Team Name (Required for Team Events) */}
             {selectedEventData && selectedEventData.teamSize && selectedEventData.teamSize.max > 1 && (
               <div>

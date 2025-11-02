@@ -23,6 +23,7 @@ import paymentRoutes from './routes/payments.js';
 import adminRoutes from './routes/admin.js';
 import testRoutes from './routes/test.js';
 import rulebookRoutes from './routes/rulebook.js';
+import sponsorRoutes from './routes/sponsors.js';
 
 // Load environment variables
 dotenv.config();
@@ -160,7 +161,7 @@ if (useCloudinary) {
 }
 
 // Ensure upload directories exist (for local storage fallback)
-const uploadDirs = ['uploads/avatars', 'uploads/events', 'uploads/payments'];
+const uploadDirs = ['uploads/avatars', 'uploads/events', 'uploads/payments', 'public/sponsors'];
 uploadDirs.forEach(dir => {
   const dirPath = path.join(__dirname, dir);
   if (!fs.existsSync(dirPath)) {
@@ -244,6 +245,19 @@ app.use('/uploads', (req, res, next) => {
   lastModified: true
 }));
 
+// Serve sponsor images from public/sponsors
+app.use('/sponsors', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+  // Cache sponsor images for 7 days
+  res.set('Cache-Control', 'public, max-age=604800');
+  next();
+}, express.static('public/sponsors', {
+  maxAge: '7d',
+  etag: true,
+  lastModified: true
+}));
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/events', cacheMiddleware(300), eventRoutes); // Cache events for 5 minutes
@@ -253,6 +267,7 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/test', testRoutes);
 app.use('/api/rulebook', rulebookRoutes);
+app.use('/api/sponsors', cacheMiddleware(3600), sponsorRoutes); // Cache sponsors for 1 hour
 
 // Health check route
 app.get('/api/health', (req, res) => {

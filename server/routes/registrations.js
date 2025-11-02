@@ -386,7 +386,7 @@ router.get('/:id', protect, async (req, res) => {
 // @access  Private/Admin
 router.post('/admin-register', protect, authorize('admin'), async (req, res) => {
   try {
-    const { userId, eventId, teamName, teamMembers, newUser } = req.body;
+    const { userId, eventId, registrationCategory, teamName, teamMembers, newUser } = req.body;
     
     // Import User model
     const User = (await import('../models/User.js')).default;
@@ -689,16 +689,28 @@ router.post('/admin-register', protect, authorize('admin'), async (req, res) => 
       }
     }
     
+    // Determine registration amount based on category or default fee
+    let registrationAmount = event.registrationFee;
+    let selectedCategoryData = null;
+    
+    if (registrationCategory && event.registrationCategories && event.registrationCategories.length > 0) {
+      selectedCategoryData = event.registrationCategories.find(cat => cat.categoryName === registrationCategory);
+      if (selectedCategoryData) {
+        registrationAmount = selectedCategoryData.fee;
+      }
+    }
+    
     // Create registration for the main user (team leader)
     const registration = await Registration.create({
       user: user._id,
       event: eventId,
       teamName,
       teamMembers: processedTeamMembers,
-      amount: event.registrationFee,
+      amount: registrationAmount,
+      registrationCategory: registrationCategory || undefined,
       registrationNumber,
-      paymentStatus: event.registrationFee === 0 ? 'completed' : 'pending',
-      paymentMethod: event.registrationFee === 0 ? 'free' : undefined,
+      paymentStatus: registrationAmount === 0 ? 'completed' : 'pending',
+      paymentMethod: registrationAmount === 0 ? 'free' : undefined,
       isTeamLeader: true
     });
     
@@ -803,6 +815,7 @@ router.post('/admin-register', protect, authorize('admin'), async (req, res) => 
             <p style="color: #2C1810;"><strong>Time:</strong> ${event.time}</p>
             <p style="color: #2C1810;"><strong>Venue:</strong> ${event.venue}</p>
             ${registration.teamName ? `<p style="color: #2C1810;"><strong>Team Name:</strong> ${registration.teamName}</p>` : ''}
+            ${registration.registrationCategory ? `<p style="color: #2C1810;"><strong>Category:</strong> ${registration.registrationCategory}</p>` : ''}
             <p style="color: #2C1810;"><strong>Amount:</strong> <span style="color: #8b4513; font-size: 18px;">₹${registration.amount}</span></p>
             <p style="color: #2C1810;"><strong>Payment Status:</strong> <span style="color: ${registration.paymentStatus === 'pending' ? '#8b4513' : '#2d7a3e'};">${registration.paymentStatus.toUpperCase()}</span></p>
           </div>

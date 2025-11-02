@@ -16,6 +16,8 @@
     "check-email": "node scripts/checkEmailConfig.js",
     "upload-rulebook": "node scripts/uploadRulebookToCloudinary.js",
     "upload-sponsors": "node scripts/uploadSponsorsToCloudinary.js",
+    "seed-sponsors": "node scripts/seedSponsorsLocal.js",
+    "seed-sponsors-cloudinary": "node scripts/uploadAndSeedSponsors.js",
     "check-cloudinary-config": "node scripts/checkCloudinaryConfig.js",
     "convert-upload": "node scripts/convertAndUploadToCloudinary.js",
     "clear-db": "node scripts/clearDatabase.js",

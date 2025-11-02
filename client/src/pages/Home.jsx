@@ -4,6 +4,7 @@ import { Calendar, Users, Trophy, ArrowRight, Zap, Target, Rocket, Clock, BookOp
 import { useAuth } from '../context/AuthContext';
 import { useState, useEffect } from 'react';
 import { useLenisScroll } from '../hooks/useLenisScroll';
+import axios from 'axios';
 
 const Home = () => {
   const { isAuthenticated } = useAuth();
@@ -53,29 +54,35 @@ const Home = () => {
     }
   ];
 
-  // Sponsors Data - Cloudinary CDN URLs for fast loading on VPS
-  // Gold Sponsors - Premium tier (larger display)
-  const goldSponsors = [
-    { id: 1, name: 'BGAUSS', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004324/savishkar/sponsors/bgauss.jpg' },
-    { id: 2, name: 'Pizza Hut', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004333/savishkar/sponsors/pizza-hut-page-0002.png' },
-  ];
+  // Sponsors Data - Fetched from database
+  const [goldSponsors, setGoldSponsors] = useState([]);
+  const [silverSponsors, setSilverSponsors] = useState([]);
+  const [sponsors, setSponsors] = useState([]);
+  const [sponsorsLoading, setSponsorsLoading] = useState(true);
 
-  // Silver Sponsors - Second tier
-  const silverSponsors = [
-    { id: 1, name: 'Vidyadeep', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004339/savishkar/sponsors/vidyadeep.png' },
-    { id: 2, name: 'Turfka', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004337/savishkar/sponsors/turfka22.png' },
-    { id: 3, name: 'ReStory', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004335/savishkar/sponsors/restory.png' },
-  ];
+  // Fetch sponsors from API
+  useEffect(() => {
+    const fetchSponsors = async () => {
+      try {
+        setSponsorsLoading(true);
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+        const response = await axios.get(`${API_URL}/sponsors`);
+        
+        if (response.data.success) {
+          setGoldSponsors(response.data.data.gold || []);
+          setSilverSponsors(response.data.data.silver || []);
+          setSponsors(response.data.data.partner || []);
+        }
+      } catch (error) {
+        console.error('Error fetching sponsors:', error);
+        // Keep empty arrays on error
+      } finally {
+        setSponsorsLoading(false);
+      }
+    };
 
-  // Regular Sponsors - Marquee display
-  const sponsors = [
-    { id: 1, name: 'Anjaneya Travels', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004323/savishkar/sponsors/anjaneya-travels.jpg' },
-    { id: 2, name: 'Creative', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004326/savishkar/sponsors/creative.png' },
-    { id: 3, name: 'Delithe', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004327/savishkar/sponsors/delithe.png' },
-    { id: 4, name: 'Jai Bharat', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004330/savishkar/sponsors/jai-bharat.jpg' },
-    { id: 5, name: 'Media Partner', logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004332/savishkar/sponsors/media-partner.jpg' },
-    { id: 6, name: "Rajan's", logo: 'https://res.cloudinary.com/dpcypbj7a/image/upload/v1762004334/savishkar/sponsors/rajan-s.jpg' },
-  ];
+    fetchSponsors();
+  }, []);
 
   useEffect(() => {
     // Set event date - November 12-13, 2025 (2 Days)
@@ -617,7 +624,7 @@ const Home = () => {
               <div className="flex flex-wrap justify-center items-stretch gap-6 md:gap-8">
                 {goldSponsors.map((sponsor) => (
                   <motion.div 
-                    key={`gold-${sponsor.id}`} 
+                    key={`gold-${sponsor._id}`} 
                     className="group"
                     data-scroll="scale"
                     whileHover={{ y: -8, scale: 1.02 }}
@@ -660,7 +667,7 @@ const Home = () => {
               </div>
               <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10">
                 {silverSponsors.map((sponsor) => (
-                  <div key={`silver-${sponsor.id}`} className="group" data-scroll="scale">
+                  <div key={`silver-${sponsor._id}`} className="group" data-scroll="scale">
                     <div className="w-36 h-36 md:w-48 md:h-48 flex items-center justify-center p-4">
                       <img 
                         src={sponsor.logo} 
@@ -696,7 +703,7 @@ const Home = () => {
             <div className="flex animate-marquee gap-6 md:gap-12">
               {/* First Set of Sponsors */}
               {sponsors.map((sponsor) => (
-                <div key={`sponsor-${sponsor.id}`} className="flex-shrink-0 group">
+                <div key={`sponsor-${sponsor._id}`} className="flex-shrink-0 group">
                   <div className="w-28 h-28 md:w-40 md:h-40 flex items-center justify-center p-2 md:p-4">
                     <img 
                       src={sponsor.logo} 
@@ -720,7 +727,7 @@ const Home = () => {
 
               {/* Duplicate Set for Seamless Loop */}
               {sponsors.map((sponsor) => (
-                <div key={`sponsor-dup-${sponsor.id}`} className="flex-shrink-0 group">
+                <div key={`sponsor-dup-${sponsor._id}`} className="flex-shrink-0 group">
                   <div className="w-28 h-28 md:w-40 md:h-40 flex items-center justify-center p-2 md:p-4">
                     <img 
                       src={sponsor.logo} 
@@ -784,8 +791,8 @@ const Home = () => {
               <h4 className="text-lg font-bold mb-2" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>
                 Student Co-ordinators
               </h4>
-              <p style={{ color: '#2C1810' }}>MR. Sambhav: +91 XXXXXXXXXX</p>
-              <p style={{ color: '#2C1810' }}>MS. Sakshi: +91 XXXXXXXXXX</p>
+              <p style={{ color: '#2C1810' }}>MR. Sambhav.K: +91 7975745105</p>
+              <p style={{ color: '#2C1810' }}>MS. Sakshi.H: +91 9110841457</p>
             </div>
             <div className="text-center">
               <h4 className="text-lg font-bold mb-2" style={{ color: '#8b4513', fontFamily: 'Georgia, serif' }}>

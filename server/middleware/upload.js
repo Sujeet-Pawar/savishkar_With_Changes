@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs from 'fs';
-import { paymentStorage, eventStorage as cloudEventStorage, avatarStorage as cloudAvatarStorage } from '../config/cloudinary.js';
+import { paymentStorage, eventStorage as cloudEventStorage, avatarStorage as cloudAvatarStorage, qrCodeStorage as cloudQRCodeStorage } from '../config/cloudinary.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,12 +11,16 @@ const __dirname = dirname(__filename);
 // Create uploads directories if they don't exist
 const avatarsDir = path.join(__dirname, '..', 'uploads', 'avatars');
 const eventsDir = path.join(__dirname, '..', 'uploads', 'events');
+const qrCodesDir = path.join(__dirname, '..', 'uploads', 'qrcodes');
 
 if (!fs.existsSync(avatarsDir)) {
   fs.mkdirSync(avatarsDir, { recursive: true });
 }
 if (!fs.existsSync(eventsDir)) {
   fs.mkdirSync(eventsDir, { recursive: true });
+}
+if (!fs.existsSync(qrCodesDir)) {
+  fs.mkdirSync(qrCodesDir, { recursive: true });
 }
 
 // Configure storage for avatars
@@ -38,6 +42,17 @@ const eventStorage = multer.diskStorage({
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, 'event-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+// Configure storage for QR codes
+const qrCodeStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, qrCodesDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'qrcode-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 
@@ -93,6 +108,14 @@ export const uploadPaymentScreenshot = multer({
   }),
   limits: {
     fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: fileFilter
+});
+
+export const uploadQRCode = multer({
+  storage: useCloudStorage ? cloudQRCodeStorage : qrCodeStorage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit for QR codes
   },
   fileFilter: fileFilter
 });
