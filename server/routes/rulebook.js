@@ -56,9 +56,9 @@ const proxyCloudinaryPDF = (cloudinaryUrl, res, disposition = 'attachment') => {
       res.setHeader('Cache-Control', 'public, max-age=86400'); // Cache for 1 day
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Range');
       res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
-      res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+      res.setHeader('X-Frame-Options', 'ALLOWALL');
       res.setHeader('X-Content-Type-Options', 'nosniff');
       res.setHeader('Accept-Ranges', 'bytes');
       
@@ -208,7 +208,11 @@ router.get('/view', async (req, res) => {
     res.setHeader('Content-Length', stat.size);
     res.setHeader('Cache-Control', 'public, max-age=86400'); // Cache for 1 day
     res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Range');
     res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.setHeader('X-Frame-Options', 'ALLOWALL');
+    res.setHeader('Accept-Ranges', 'bytes');
 
     // Stream the file
     const fileStream = fs.createReadStream(rulebookPath);

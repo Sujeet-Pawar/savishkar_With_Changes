@@ -182,7 +182,8 @@ app.use(helmet({
       imgSrc: ["'self'", "data:", "https:", "http:", "blob:"],
       connectSrc: ["'self'", "http://localhost:5173", "http://localhost:5174", "http://localhost:5000"],
       frameSrc: ["'self'", "https://res.cloudinary.com"],
-      objectSrc: ["'none'"],
+      objectSrc: ["'self'"],
+      mediaSrc: ["'self'", "blob:"],
     },
   },
 }));

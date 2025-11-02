@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Calendar, Users, Trophy, ArrowRight, Zap, Target, Rocket, Clock, BookOpen, Download, Instagram, Mail, ChevronDown, ChevronLeft, ChevronRight, ArrowUp, X, Eye } from 'lucide-react';
+import { Calendar, Users, Trophy, ArrowRight, Zap, Target, Rocket, Clock, BookOpen, Download, Instagram, Mail, ChevronDown, ChevronLeft, ChevronRight, ArrowUp, Eye } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useState, useEffect } from 'react';
 import { useLenisScroll } from '../hooks/useLenisScroll';
@@ -21,35 +21,39 @@ const Home = () => {
 
   // Back to Top Button State
   const [showBackToTop, setShowBackToTop] = useState(false);
-  
-  // Rulebook Modal State
-  const [showRulebookModal, setShowRulebookModal] = useState(false);
 
   // Photo Gallery State
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // Get server URL without /api suffix
+  const getServerUrl = () => {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    return apiUrl.replace(/\/api$/, '');
+  };
+  
   const galleryImages = [
     {
-      url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
+      url: `${getServerUrl()}/uploads/${encodeURIComponent('DSC_0015 - Copy.webp')}`,
       caption: 'Savishkar 2024 - Opening Ceremony'
     },
     {
-      url: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800',
+      url: `${getServerUrl()}/uploads/DSC_0026.webp`,
       caption: 'Savishkar 2024 - Technical Events'
     },
     {
-      url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800',
+      url: `${getServerUrl()}/uploads/DSC_0046.webp`,
       caption: 'Savishkar 2024 - Cultural Night'
     },
     {
-      url: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800',
+      url: `${getServerUrl()}/uploads/DSC_0171.webp`,
       caption: 'Savishkar 2024 - Prize Distribution'
     },
     {
-      url: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800',
+      url: `${getServerUrl()}/uploads/DSC_0174.webp`,
       caption: 'Savishkar 2024 - Workshops'
     },
     {
-      url: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800',
+      url: `${getServerUrl()}/uploads/DSC_0260.webp`,
       caption: 'Savishkar 2024 - Team Events'
     }
   ];
@@ -120,22 +124,7 @@ const Home = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Lock body scroll when modal is open
-  useEffect(() => {
-    if (showRulebookModal) {
-      // Prevent scrolling on body
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = '0px'; // Prevent layout shift from scrollbar
-    } else {
-      // Restore scrolling
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
-    };
-  }, [showRulebookModal]);
+
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -292,6 +281,10 @@ const Home = () => {
                         alt={galleryImages[currentImageIndex].caption}
                         className="w-full h-full object-cover"
                         style={{ filter: 'brightness(0.9)' }}
+                        onError={(e) => {
+                          console.error('Failed to load image:', galleryImages[currentImageIndex].url);
+                          e.target.style.display = 'none';
+                        }}
                       />
                     </motion.div>
                   </AnimatePresence>
@@ -450,113 +443,22 @@ const Home = () => {
                 View our comprehensive rulebook to learn everything about Savishkar 2025, event guidelines, rules and regulations.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button
-                  onClick={() => setShowRulebookModal(true)}
+              <div className="flex justify-center">
+                <a
+                  href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/rulebook/view`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="btn-primary text-base px-8 py-3 inline-flex items-center justify-center group"
                 >
                   <Eye className="mr-2 w-5 h-5" />
                   <span>View Rulebook</span>
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
-                
-                <a
-                  href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/rulebook/download`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-secondary text-base px-8 py-3 inline-flex items-center justify-center group"
-                >
-                  <Download className="mr-2 w-5 h-5" />
-                  <span>Download PDF</span>
                 </a>
               </div>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Rulebook Modal */}
-      <AnimatePresence>
-        {showRulebookModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md"
-            style={{ backgroundColor: 'rgba(92, 64, 51, 0.7)' }}
-            onClick={() => setShowRulebookModal(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="w-full max-w-6xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden"
-              style={{ backgroundColor: '#FEF3E2' }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Header */}
-              <div className="flex items-center justify-between p-4 border-b-2" style={{ borderColor: 'rgba(92, 64, 51, 0.2)' }}>
-                <h3 className="text-2xl font-bold" style={{ color: '#5C4033', fontFamily: 'Georgia, serif' }}>
-                  Savishkar 2025 - Event Rulebook
-                </h3>
-                <div className="flex items-center gap-2">
-                  <a
-                    href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/rulebook/download`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 rounded-lg transition-all font-semibold flex items-center gap-2"
-                    style={{ 
-                      backgroundColor: 'rgba(250, 129, 47, 0.2)',
-                      color: '#FA812F',
-                      border: '2px solid rgba(250, 129, 47, 0.3)'
-                    }}
-                    title="Download PDF"
-                  >
-                    <Download className="w-5 h-5" />
-                    <span className="hidden sm:inline">Download</span>
-                  </a>
-                  <button
-                    onClick={() => setShowRulebookModal(false)}
-                    className="p-2 rounded-full hover:bg-black/10 transition-colors"
-                    style={{ color: '#5C4033' }}
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
-                </div>
-              </div>
-              
-              {/* PDF Viewer */}
-              <div className="w-full h-[calc(90vh-80px)] overflow-auto bg-gray-100 rounded-lg">
-                <iframe
-                  src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/rulebook/view`}
-                  className="w-full h-full"
-                  title="Savishkar 2025 Rulebook"
-                  style={{ border: 'none' }}
-                  onError={(e) => {
-                    console.error('Failed to load rulebook PDF');
-                    e.target.style.display = 'none';
-                  }}
-                />
-                <noscript>
-                  <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-                    <p className="text-lg mb-4" style={{ color: '#5C4033' }}>
-                      Unable to display PDF. Please download it instead.
-                    </p>
-                    <a
-                      href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/rulebook/download`}
-                      className="btn-primary"
-                      download
-                    >
-                      <Download className="mr-2 w-5 h-5" />
-                      Download Rulebook
-                    </a>
-                  </div>
-                </noscript>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Countdown Timer Section */}
       <section className="py-12 relative overflow-hidden">
