@@ -1,0 +1,186 @@
+import path from 'path';
+import fs from 'fs';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load environment variables from .env (when run from server directory)
+dotenv.config({ path: path.join(__dirname, '.env') });
+
+// Event Schema (inline to avoid import issues)
+const eventSchema = new mongoose.Schema({
+  name: String,
+  image: String,
+  slug: String,
+  description: String,
+  category: String,
+  department: String,
+  date: Date,
+  time: String,
+  venue: String,
+  registrationFee: Number,
+  maxParticipants: Number,
+  currentParticipants: Number
+}, { strict: false });
+
+const isImage = (file) => /\.(png|jpg|jpeg|gif|webp)$/i.test(file);
+
+const normalizeName = (raw) => {
+  return raw
+    .replace(/\.[^/.]+$/, '') // Remove extension
+    .replace(/-ezgif\.com-png-to-webp-converter$/i, '') // Remove conversion suffix
+    .replace(/-elementor-io-optimized$/i, '') // Remove optimization suffix
+    .replace(/\s*\([^)]*\)\s*/g, ' ') // Remove parentheses
+    .replace(/[-_]/g, ' ') // Replace dashes and underscores with spaces
+    .replace(/\s+/g, ' ') // Normalize spaces
+    .trim();
+};
+
+const main = async () => {
+  console.log('\n' + '='.repeat(70));
+  console.log('🚀 Event Poster Linking Script - Standalone Version');
+  console.log('='.repeat(70) + '\n');
+  
+  const uploadsDir = path.join(__dirname, 'uploads', 'events');
+  
+  console.log(`📁 Checking uploads folder: ${uploadsDir}`);
+  if (!fs.existsSync(uploadsDir)) {
+    console.error(`❌ ERROR: Uploads folder not found!`);
+    console.error(`   Expected: ${uploadsDir}`);
+    process.exit(1);
+  }
+
+  const files = fs.readdirSync(uploadsDir).filter(isImage);
+  console.log(`✅ Found ${files.length} image files\n`);
+
+  // Connect to MongoDB
+  console.log('🔌 Connecting to MongoDB...');
+  const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URI;
+  
+  if (!MONGODB_URI) {
+    console.error('❌ ERROR: MONGODB_URI not found in environment variables!');
+    console.error('   Please check server/.env file');
+    process.exit(1);
+  }
+
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log('✅ MongoDB Connected!\n');
+  } catch (error) {
+    console.error(`❌ MongoDB connection failed: ${error.message}`);
+    process.exit(1);
+  }
+
+  // Get Event model
+  const Event = mongoose.models.Event || mongoose.model('Event', eventSchema);
+  
+  const allEvents = await Event.find({});
+  console.log(`📊 Total events in database: ${allEvents.length}`);
+  console.log(`📋 Event names in database:`);
+  allEvents.forEach(e => console.log(`   - ${e.name}`));
+  console.log('');
+
+  let updated = 0;
+  const unmatched = [];
+  const matched = [];
+
+  console.log('🔄 Processing files...\n');
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const baseName = normalizeName(file);
+
+    console.log(`[${i + 1}/${files.length}] ${file}`);
+    console.log(`   Normalized: "${baseName}"`);
+
+    // Try exact match (case-insensitive)
+    let event = allEvents.find(e => 
+      e.name.toLowerCase() === baseName.toLowerCase()
+    );
+
+    // Try partial match if exact match fails
+    if (!event) {
+      const firstWord = baseName.split(' ')[0];
+      if (firstWord.length > 2) {
+        event = allEvents.find(e => 
+          e.name.toLowerCase().includes(firstWord.toLowerCase())
+        );
+        if (event) {
+          console.log(`   ⚠️  Partial match: "${event.name}"`);
+        }
+      }
+    }
+
+    // Try matching without spaces
+    if (!event) {
+      const noSpaces = baseName.replace(/\s+/g, '').toLowerCase();
+      event = allEvents.find(e => 
+        e.name.replace(/\s+/g, '').toLowerCase() === noSpaces
+      );
+      if (event) {
+        console.log(`   ⚠️  No-space match: "${event.name}"`);
+      }
+    }
+
+    if (!event) {
+      console.log(`   ❌ NO MATCH\n`);
+      unmatched.push({ file, baseName });
+      continue;
+    }
+
+    console.log(`   ✅ Matched to event: "${event.name}"`);
+
+    // Use the existing file path
+    const imageUrl = `/uploads/events/${file}`;
+    console.log(`   🔗 Image URL: ${imageUrl}`);
+
+    try {
+      event.image = imageUrl;
+      await event.save();
+      updated++;
+      matched.push({ file, event: event.name, url: imageUrl });
+      console.log(`   💾 Database updated\n`);
+    } catch (error) {
+      console.error(`   ❌ Failed to update database: ${error.message}\n`);
+      unmatched.push({ file, baseName, error: error.message });
+    }
+  }
+
+  // Summary
+  console.log('='.repeat(70));
+  console.log('📊 SUMMARY');
+  console.log('='.repeat(70));
+  console.log(`✅ Successfully linked: ${updated} posters`);
+  console.log(`❌ Unmatched: ${files.length - updated} files`);
+  console.log(`📁 Total processed: ${files.length}\n`);
+
+  if (matched.length > 0) {
+    console.log('✅ Successfully Linked:');
+    matched.forEach(m => console.log(`   ${m.file} → ${m.event}`));
+    console.log('');
+  }
+
+  if (unmatched.length > 0) {
+    console.log('❌ Unmatched Files:');
+    unmatched.forEach(u => {
+      console.log(`   ${u.file} (normalized: "${u.baseName}")`);
+      if (u.error) console.log(`     Error: ${u.error}`);
+    });
+    console.log('\n💡 Tip: Check if these event names exist in your database or rename the files');
+    console.log('');
+  }
+
+  await mongoose.connection.close();
+  console.log('✅ Script completed successfully!\n');
+  console.log('='.repeat(70) + '\n');
+};
+
+main().catch(err => {
+  console.error('\n❌ Fatal Error:', err.message);
+  console.error(err.stack);
+  process.exit(1);
+});
