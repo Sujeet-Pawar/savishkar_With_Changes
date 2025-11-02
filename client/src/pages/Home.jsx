@@ -54,14 +54,14 @@ const Home = () => {
     }
   ];
 
-  // Sponsors Data - Using local files
+  // Sponsors Data - Using local files with corrected paths
   const goldSponsors = [
     { name: 'Skyworld', logo: '/sponsors/skyworld.jpg' },
-    { name: 'Jaybharat', logo: '/sponsors/jaybharat.jpg' }
+    { name: 'Jaybharat', logo: '/sponsors/Jai bharat.jpg' }
   ];
 
   const silverSponsors = [
-    { name: 'Baguss', logo: '/sponsors/baguss.jpg' },
+    { name: 'BGAUSS', logo: '/sponsors/BGAUSS.jpg' },
     { name: 'Aquavales', logo: '/sponsors/aquavales.png' }
   ];
 
@@ -390,10 +390,12 @@ const Home = () => {
                 </h3>
               </div>
               <div className="space-y-3">
-                <ScheduleItem time="09:00 AM" event="Registration & Inauguration" />
-                <ScheduleItem time="11:00 AM" event="Technical Events Begin" />
-                <ScheduleItem time="02:00 PM" event="Workshop Sessions" />
-                <ScheduleItem time="05:00 PM" event="Cultural Performances" />
+                <ScheduleItem time="08:30 AM" event="Registration Desk Opens" />
+                <ScheduleItem time="09:30 AM" event="Inauguration" />
+                <ScheduleItem time="11:00 AM" event="Events Begin" />
+                <ScheduleItem time="01:00 PM" event="Lunch Break" />
+                <ScheduleItem time="02:30 PM" event="Events Resume" />
+                <ScheduleItem time="06:00 PM" event="End of Day 1" />
               </div>
             </div>
 
@@ -412,10 +414,10 @@ const Home = () => {
                 </h3>
               </div>
               <div className="space-y-3">
-                <ScheduleItem time="09:00 AM" event="Hackathon & Competitions" />
-                <ScheduleItem time="12:00 PM" event="Gaming & Project Exhibitions" />
-                <ScheduleItem time="04:00 PM" event="Prize Distribution" />
-                <ScheduleItem time="06:00 PM" event="Closing Ceremony" />
+                <ScheduleItem time="09:00 AM" event="Events Begin" />
+                <ScheduleItem time="01:00 PM" event="Lunch" />
+                <ScheduleItem time="05:00 PM" event="Validictory Ceremony" />
+                <ScheduleItem time="09:30 PM" event="Closing Ceremony" />
               </div>
             </div>
           </div>
@@ -604,7 +606,7 @@ const Home = () => {
             <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20">
               {[
                 { logo: '/sponsors/skyworld.jpg', name: 'Skyworld' },
-                { logo: '/sponsors/jaybharat.jpg', name: 'Jaybharat' },
+                { logo: '/sponsors/Jai bharat.jpg', name: 'Jaybharat' },
               ].map((sponsor, index) => (
                 <motion.div 
                   key={`gold-${index}`} 
@@ -637,11 +639,44 @@ const Home = () => {
             </div>
             <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16">
               {[
-                { logo: '/sponsors/BGAUSS.jpg', name: 'Baguss' },
+                { logo: '/sponsors/BGAUSS.jpg', name: 'BGAUSS' },
                 { logo: '/sponsors/aquavales.png', name: 'Aquavales' },
               ].map((sponsor, index) => (
                 <motion.div 
                   key={`silver-${index}`} 
+                  className="group" 
+                  data-scroll="scale"
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="w-32 h-32 md:w-48 md:h-48 flex items-center justify-center">
+                    <img 
+                      src={sponsor.logo} 
+                      alt={sponsor.name}
+                      className="w-full h-full object-contain transition-all duration-300 filter drop-shadow-md"
+                    />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Media Partners */}
+          <div className="mb-16" data-scroll="fade">
+            <div className="flex items-center justify-center mb-10">
+              <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#FF4081' }}>
+                <h3 className="text-lg md:text-xl font-bold flex items-center gap-2 text-white" style={{ fontFamily: 'Georgia, serif' }}>
+                  <span className="text-2xl">📱</span>
+                  <span>Media Partners</span>
+                </h3>
+              </div>
+            </div>
+            <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16">
+              {[
+                { logo: '/sponsors/media partner.jpg', name: 'Media Partner' },
+              ].map((sponsor, index) => (
+                <motion.div 
+                  key={`media-${index}`} 
                   className="group" 
                   data-scroll="scale"
                   whileHover={{ scale: 1.1 }}
@@ -679,7 +714,6 @@ const Home = () => {
                   { logo: '/sponsors/Vidyadeep .png', name: 'Vidyadeep' },
                   { logo: '/sponsors/delithe.png', name: 'Delithe' },
                   { logo: '/sponsors/rajan\'s.jpg', name: 'Rajan\'s' },
-                  { logo: '/sponsors/media partner.jpg', name: 'Media Partner' },
                 ].concat([
                   { logo: '/sponsors/Anjaneya Travels.jpg', name: 'Anjaneya Travels' },
                   { logo: '/sponsors/CREATIVE.png', name: 'Creative' },
@@ -688,7 +722,6 @@ const Home = () => {
                   { logo: '/sponsors/Vidyadeep .png', name: 'Vidyadeep' },
                   { logo: '/sponsors/delithe.png', name: 'Delithe' },
                   { logo: '/sponsors/rajan\'s.jpg', name: 'Rajan\'s' },
-                  { logo: '/sponsors/media partner.jpg', name: 'Media Partner' },
                 ]).map((partner, index) => (
                   <div 
                     key={`partner-${index}`} 
