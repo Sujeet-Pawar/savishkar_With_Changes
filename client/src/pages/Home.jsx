@@ -500,7 +500,7 @@ const Home = () => {
             <div className="flex items-center justify-center mb-5">
               <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#FFD700' }}>
                 <h3 className="text-lg md:text-xl font-bold flex items-center gap-2" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
-                  <span className="text-2xl">🏆</span>
+                  <span className="text-2xl"></span>
                   <span>Gold Sponsors</span>
                 </h3>
               </div>
@@ -534,7 +534,7 @@ const Home = () => {
             <div className="flex items-center justify-center mb-5">
               <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#C0C0C0' }}>
                 <h3 className="text-lg md:text-xl font-bold flex items-center gap-2" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
-                  <span className="text-2xl">🥈</span>
+                  <span className="text-2xl"></span>
                   <span>Silver Sponsors</span>
                 </h3>
               </div>
@@ -568,7 +568,7 @@ const Home = () => {
             <div className="flex items-center justify-center mb-5">
               <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#FF4081' }}>
                 <h3 className="text-lg md:text-xl font-bold flex items-center gap-2 text-white" style={{ fontFamily: 'Georgia, serif' }}>
-                  <span className="text-2xl">📱</span>
+                  <span className="text-2xl"></span>
                   <span>Media Partners</span>
                 </h3>
               </div>
@@ -601,7 +601,7 @@ const Home = () => {
             <div className="flex items-center justify-center mb-5">
               <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
                 <h3 className="text-lg md:text-xl font-bold flex items-center gap-2 text-white" style={{ fontFamily: 'Georgia, serif' }}>
-                  <span className="text-2xl">🤝</span>
+                  <span className="text-2xl"></span>
                   <span>Our Partners</span>
                 </h3>
               </div>
