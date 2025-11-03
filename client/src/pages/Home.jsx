@@ -322,7 +322,7 @@ const Home = () => {
             >
               <Calendar className="w-12 h-12 mx-auto mb-4" style={{ color: '#1a365d' }} />
               <h3 className="text-4xl font-bold mb-2" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
-                35+
+                40+
               </h3>
               <p className="text-sm" style={{ color: '#5C4033' }}>Events</p>
             </div>
