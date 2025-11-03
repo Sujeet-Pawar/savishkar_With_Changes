@@ -263,7 +263,7 @@ const Home = () => {
                   data-scroll-delay="100"
                 >
                   {/* GalleryHub */}
-                </h3>284395
+                </h3>
 
                 {/* Carousel Container */}
                 <div className="relative overflow-hidden rounded-2xl shadow-2xl" style={{ aspectRatio: '4/3' }}>
