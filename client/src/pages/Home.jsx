@@ -262,8 +262,8 @@ const Home = () => {
                   data-scroll="fade"
                   data-scroll-delay="100"
                 >
-                  GalleryHub
-                </h3>
+                  {/* GalleryHub */}
+                </h3>284395
 
                 {/* Carousel Container */}
                 <div className="relative overflow-hidden rounded-2xl shadow-2xl" style={{ aspectRatio: '4/3' }}>
@@ -497,7 +497,7 @@ const Home = () => {
 
           {/* Gold Sponsors */}
           <div className="mb-16" data-scroll="fade">
-            <div className="flex items-center justify-center mb-10">
+            <div className="flex items-center justify-center mb-5">
               <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#FFD700' }}>
                 <h3 className="text-lg md:text-xl font-bold flex items-center gap-2" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
                   <span className="text-2xl">🏆</span>
@@ -531,7 +531,7 @@ const Home = () => {
 
           {/* Silver Sponsors */}
           <div className="mb-16" data-scroll="fade">
-            <div className="flex items-center justify-center mb-10">
+            <div className="flex items-center justify-center mb-5">
               <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#C0C0C0' }}>
                 <h3 className="text-lg md:text-xl font-bold flex items-center gap-2" style={{ color: '#1a365d', fontFamily: 'Georgia, serif' }}>
                   <span className="text-2xl">🥈</span>
@@ -565,7 +565,7 @@ const Home = () => {
 
           {/* Media Partners */}
           <div className="mb-16" data-scroll="fade">
-            <div className="flex items-center justify-center mb-10">
+            <div className="flex items-center justify-center mb-5">
               <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#FF4081' }}>
                 <h3 className="text-lg md:text-xl font-bold flex items-center gap-2 text-white" style={{ fontFamily: 'Georgia, serif' }}>
                   <span className="text-2xl">📱</span>
@@ -598,7 +598,7 @@ const Home = () => {
 
           {/* Our Partners - Marquee */}
           <div className="mb-12" data-scroll="fade">
-            <div className="flex items-center justify-center mb-10">
+            <div className="flex items-center justify-center mb-5">
               <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
                 <h3 className="text-lg md:text-xl font-bold flex items-center gap-2 text-white" style={{ fontFamily: 'Georgia, serif' }}>
                   <span className="text-2xl">🤝</span>
@@ -627,7 +627,7 @@ const Home = () => {
                 ]).map((partner, index) => (
                   <div 
                     key={`partner-${index}`} 
-                    className="inline-flex items-center justify-center mx-8"
+                    className="inline-flex items-center justify-center mx-4"
                   >
                     <div className="w-24 h-24 md:w-32 md:h-32 flex items-center justify-center">
                       <img 
@@ -647,7 +647,7 @@ const Home = () => {
 
       {/* CTA Section */}
       {!isAuthenticated && (
-        <section>
+        <section className="py-16">
           <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div
               className="card text-center p-12 relative overflow-hidden"
