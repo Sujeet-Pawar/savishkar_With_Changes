@@ -645,3 +645,9 @@ a {
   animation-play-state: paused;
 }
 
+/* Fast continuous marquee for partners */
+.animate-marquee-fast {
+  animation: marquee 15s linear infinite;
+  will-change: transform;
+}
+

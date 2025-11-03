@@ -32,7 +32,7 @@ const sponsorMapping = {
   
   // Silver Sponsors
   'Belcakes.jpg': { name: 'Bagus', tier: 'silver', displayOrder: 1 },
-  'paraiba_logo_white_bg.png': { name: 'AquaValues', tier: 'silver', displayOrder: 2 },
+  'aqua.webp': { name: 'Aqua', tier: 'silver', displayOrder: 2 },
   
   // Partners
   'AT ASSOCIATES.PNG': { name: 'AT Associates', tier: 'partner', displayOrder: 1 },

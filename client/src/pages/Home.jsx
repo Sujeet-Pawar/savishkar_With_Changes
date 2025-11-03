@@ -61,12 +61,12 @@ const Home = () => {
   // Sponsors Data - Using local files with corrected paths
   const goldSponsors = [
     { name: 'Skyworld', logo: '/sponsors/skyworld.jpg' },
-    { name: 'Jaybharat', logo: '/sponsors/Jai bharat.jpg' }
+    { name: 'Jai Bharat', logo: '/sponsors/Jai bharat.webp' }
   ];
 
   const silverSponsors = [
-    { name: 'BGAUSS', logo: '/sponsors/BGAUSS.jpg' },
-    { name: 'Aquavales', logo: '/sponsors/aquavales.png' }
+    { name: 'BGAUSS', logo: '/sponsors/BGAUSS.webp' },
+    { name: 'Aquavalves', logo: '/sponsors/aquavalves.webp' }
   ];
 
   useEffect(() => {
@@ -508,7 +508,7 @@ const Home = () => {
             <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20">
               {[
                 { logo: '/sponsors/skyworld.jpg', name: 'Skyworld' },
-                { logo: '/sponsors/Jai bharat.jpg', name: 'Jaybharat' },
+                { logo: '/sponsors/Jai bharat.webp', name: 'Jai Bharat' },
               ].map((sponsor, index) => (
                 <motion.div 
                   key={`gold-${index}`} 
@@ -517,11 +517,11 @@ const Home = () => {
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
+                  <div className="w-40 h-40 md:w-48 md:h-48 flex items-center justify-center">
                     <img 
                       src={sponsor.logo} 
                       alt={sponsor.name}
-                      className="max-w-full max-h-full object-contain transition-all duration-300 filter drop-shadow-lg"
+                      className="w-full h-full object-contain transition-all duration-300 filter drop-shadow-lg"
                     />
                   </div>
                 </motion.div>
@@ -541,8 +541,8 @@ const Home = () => {
             </div>
             <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16">
               {[
-                { logo: '/sponsors/BGAUSS.jpg', name: 'BGAUSS' },
-                { logo: '/sponsors/aquavales.png', name: 'Aquavales' },
+                { logo: '/sponsors/BGAUSS.webp', name: 'BGAUSS' },
+                { logo: '/sponsors/aquavalves.webp', name: 'Aquavalves' },
               ].map((sponsor, index) => (
                 <motion.div 
                   key={`silver-${index}`} 
@@ -551,7 +551,7 @@ const Home = () => {
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="w-32 h-32 md:w-48 md:h-48 flex items-center justify-center">
+                  <div className="w-40 h-40 md:w-48 md:h-48 flex items-center justify-center">
                     <img 
                       src={sponsor.logo} 
                       alt={sponsor.name}
@@ -567,15 +567,15 @@ const Home = () => {
           <div className="mb-16" data-scroll="fade">
             <div className="flex items-center justify-center mb-5">
               <div className="px-8 py-3 rounded-full shadow-lg" style={{ background: '#FF4081' }}>
-                <h3 className="text-lg md:text-xl font-bold flex items-center gap-2 text-white" style={{ fontFamily: 'Georgia, serif' }}>
+                <h3 className="text-lg md:text-xl font-bold flex items-center gap-2 text-white" style={{ color:'#ffffff',fontFamily: 'Georgia, serif' }}>
                   <span className="text-2xl"></span>
-                  <span>Media Partners</span>
+                  <span>Media Partner</span>
                 </h3>
               </div>
             </div>
             <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16">
               {[
-                { logo: '/sponsors/media partner.jpg', name: 'Media Partner' },
+                { logo: '/sponsors/media partner.webp', name: 'Media Partner' },
               ].map((sponsor, index) => (
                 <motion.div 
                   key={`media-${index}`} 
@@ -584,7 +584,7 @@ const Home = () => {
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="w-32 h-32 md:w-48 md:h-48 flex items-center justify-center">
+                  <div className="w-40 h-40 md:w-48 md:h-48 flex items-center justify-center">
                     <img 
                       src={sponsor.logo} 
                       alt={sponsor.name}
@@ -607,29 +607,33 @@ const Home = () => {
               </div>
             </div>
             <div className="relative overflow-hidden py-8">
-              <div className="flex animate-marquee whitespace-nowrap">
+              <div className="flex animate-marquee-fast whitespace-nowrap">
                 {[
-                  { logo: '/sponsors/Anjaneya Travels.jpg', name: 'Anjaneya Travels' },
-                  { logo: '/sponsors/CREATIVE.png', name: 'Creative' },
-                  { logo: '/sponsors/ReStory.png', name: 'ReStory' },
-                  { logo: '/sponsors/Turfka22.jpg', name: 'Turfka' },
-                  { logo: '/sponsors/Vidyadeep .png', name: 'Vidyadeep' },
-                  { logo: '/sponsors/delithe.png', name: 'Delithe' },
-                  { logo: '/sponsors/rajan\'s.jpg', name: 'Rajan\'s' },
+                  { logo: '/sponsors/Anjaneya Travels.webp', name: 'Anjaneya Travels' },
+                  { logo: '/sponsors/CREATIVE.webp', name: 'Creative' },
+                  { logo: '/sponsors/ReStory.webp', name: 'ReStory' },
+                  { logo: '/sponsors/Turfka22.webp', name: 'Turfka' },
+                  { logo: '/sponsors/Vidyadeep .webp', name: 'Vidyadeep' },
+                  { logo: '/sponsors/delithe.webp', name: 'Delithe' },
+                  { logo: '/sponsors/rajan\'s.webp', name: 'Rajan\'s' },
+                  { logo: '/sponsors/pizzahut.webp', name: 'Pizza Hut' },
+                  { logo: '/sponsors/Gayatri_Travells.webp', name: 'Gayatri Travels' },
                 ].concat([
-                  { logo: '/sponsors/Anjaneya Travels.jpg', name: 'Anjaneya Travels' },
-                  { logo: '/sponsors/CREATIVE.png', name: 'Creative' },
-                  { logo: '/sponsors/ReStory.png', name: 'ReStory' },
-                  { logo: '/sponsors/Turfka22.jpg', name: 'Turfka' },
-                  { logo: '/sponsors/Vidyadeep .png', name: 'Vidyadeep' },
-                  { logo: '/sponsors/delithe.png', name: 'Delithe' },
-                  { logo: '/sponsors/rajan\'s.jpg', name: 'Rajan\'s' },
+                  { logo: '/sponsors/Anjaneya Travels.webp', name: 'Anjaneya Travels' },
+                  { logo: '/sponsors/CREATIVE.webp', name: 'Creative' },
+                  { logo: '/sponsors/ReStory.webp', name: 'ReStory' },
+                  { logo: '/sponsors/Turfka22.webp', name: 'Turfka' },
+                  { logo: '/sponsors/Vidyadeep .webp', name: 'Vidyadeep' },
+                  { logo: '/sponsors/delithe.webp', name: 'Delithe' },
+                  { logo: '/sponsors/rajan\'s.webp', name: 'Rajan\'s' },
+                  { logo: '/sponsors/pizzahut.webp', name: 'Pizza Hut' },
+                  { logo: '/sponsors/Gayatri_Travells.webp', name: 'Gayatri Travels' },
                 ]).map((partner, index) => (
                   <div 
                     key={`partner-${index}`} 
-                    className="inline-flex items-center justify-center mx-4"
+                    className="inline-flex items-center justify-center mx-6"
                   >
-                    <div className="w-24 h-24 md:w-32 md:h-32 flex items-center justify-center">
+                    <div className="w-28 h-28 md:w-32 md:h-32 flex items-center justify-center">
                       <img 
                         src={partner.logo} 
                         alt={partner.name}
@@ -641,6 +645,7 @@ const Home = () => {
               </div>
             </div>
           </div>
+
 
         </div>
       </section>
