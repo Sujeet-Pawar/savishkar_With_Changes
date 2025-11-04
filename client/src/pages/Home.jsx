@@ -33,7 +33,7 @@ const Home = () => {
   
   const galleryImages = [
     {
-      url: `${getServerUrl()}/uploads/${encodeURIComponent('DSC_0015 - Copy.webp')}`,
+      url: `${getServerUrl()}/uploads/${encodeURIComponent('DSC_0015.webp')}`,
       caption: 'Savishkar 2024 - Opening Ceremony'
     },
     {
@@ -142,11 +142,41 @@ const Home = () => {
             className="w-full md:max-w-4xl"
           >
             <img 
-              src="/glow.png" 
+              src="/glow.webp" 
               alt="Savishkar 2025" 
               className="w-full object-contain"
               onError={(e) => {
-                e.target.style.display = 'none';
+                try {
+                  const imgEl = e.target;
+                  const currentSrc = imgEl.getAttribute('src') || '';
+                  const candidates = [];
+                  if (currentSrc.endsWith('.webp')) {
+                    candidates.push(currentSrc.replace(/\.webp$/, '.png'));
+                    candidates.push(currentSrc.replace(/\.webp$/, '.jpg'));
+                    candidates.push(currentSrc.replace(/\.webp$/, '.jpeg'));
+                  } else if (currentSrc.endsWith('.png')) {
+                    candidates.push(currentSrc.replace(/\.png$/, '.jpg'));
+                    candidates.push(currentSrc.replace(/\.png$/, '.jpeg'));
+                    candidates.push(currentSrc.replace(/\.png$/, '.webp'));
+                  } else if (currentSrc.endsWith('.jpg')) {
+                    candidates.push(currentSrc.replace(/\.jpg$/, '.jpeg'));
+                    candidates.push(currentSrc.replace(/\.jpg$/, '.png'));
+                    candidates.push(currentSrc.replace(/\.jpg$/, '.webp'));
+                  } else if (currentSrc.endsWith('.jpeg')) {
+                    candidates.push(currentSrc.replace(/\.jpeg$/, '.jpg'));
+                    candidates.push(currentSrc.replace(/\.jpeg$/, '.png'));
+                    candidates.push(currentSrc.replace(/\.jpeg$/, '.webp'));
+                  }
+                  const next = candidates.find((c) => c !== currentSrc);
+                  if (next) {
+                    imgEl.onerror = null;
+                    imgEl.src = next;
+                  } else {
+                    imgEl.style.display = 'none';
+                  }
+                } catch (_) {
+                  e.target.style.display = 'none';
+                }
               }}
             />
           </motion.div>
@@ -282,8 +312,40 @@ const Home = () => {
                         className="w-full h-full object-cover"
                         style={{ filter: 'brightness(0.9)' }}
                         onError={(e) => {
-                          console.error('Failed to load image:', galleryImages[currentImageIndex].url);
-                          e.target.style.display = 'none';
+                          try {
+                            const imgEl = e.target;
+                            const currentSrc = imgEl.getAttribute('src') || '';
+                            // Attempt fallbacks in order if primary format fails
+                            const candidates = [];
+                            if (currentSrc.endsWith('.webp')) {
+                              candidates.push(currentSrc.replace(/\.webp$/, '.jpg'));
+                              candidates.push(currentSrc.replace(/\.webp$/, '.jpeg'));
+                              candidates.push(currentSrc.replace(/\.webp$/, '.png'));
+                            } else if (currentSrc.endsWith('.jpg')) {
+                              candidates.push(currentSrc.replace(/\.jpg$/, '.jpeg'));
+                              candidates.push(currentSrc.replace(/\.jpg$/, '.png'));
+                              candidates.push(currentSrc.replace(/\.jpg$/, '.webp'));
+                            } else if (currentSrc.endsWith('.jpeg')) {
+                              candidates.push(currentSrc.replace(/\.jpeg$/, '.jpg'));
+                              candidates.push(currentSrc.replace(/\.jpeg$/, '.png'));
+                              candidates.push(currentSrc.replace(/\.jpeg$/, '.webp'));
+                            } else if (currentSrc.endsWith('.png')) {
+                              candidates.push(currentSrc.replace(/\.png$/, '.jpg'));
+                              candidates.push(currentSrc.replace(/\.png$/, '.jpeg'));
+                              candidates.push(currentSrc.replace(/\.png$/, '.webp'));
+                            }
+
+                            // Find the first different candidate and try it
+                            const next = candidates.find((c) => c !== currentSrc);
+                            if (next) {
+                              imgEl.onerror = null; // prevent infinite loop on the next attempt
+                              imgEl.src = next;
+                            } else {
+                              imgEl.style.display = 'none';
+                            }
+                          } catch (err) {
+                            e.target.style.display = 'none';
+                          }
                         }}
                       />
                     </motion.div>
