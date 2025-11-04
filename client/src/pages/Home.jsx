@@ -438,7 +438,7 @@ const Home = () => {
               
               <div className="flex justify-center">
                 <a
-                  href={`${import.meta.env.VITE_API_URL || 'http://savishkar2025.com/api'}/rulebook/view`}
+                  href={`${import.meta.env.VITE_API_URL || 'https://savishkar2025.com/api'}/rulebook/view`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary text-base px-8 py-3 inline-flex items-center justify-center group"
