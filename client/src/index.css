@@ -651,3 +651,18 @@ a {
   will-change: transform;
 }
 
+/* Truly infinite marquee for seamless looping */
+.animate-marquee-infinite {
+  animation: marquee-infinite 20s linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
